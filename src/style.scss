@@ -297,6 +297,7 @@ $yellow:#f5bc04;
     position: absolute;
     bottom: 0;
     padding: 30px;
+    color: black;
 
     .single & {
       width: 100%;
@@ -305,7 +306,7 @@ $yellow:#f5bc04;
     }
 
     h2 {
-      color: white;
+      color: black;
       font-weight: 300;
       .single & {
         font-size: 72px;
@@ -314,7 +315,7 @@ $yellow:#f5bc04;
 
     > span {
       display: block;
-      color: rgba(255,255,255,.5);
+      color: black;
       text-transform: uppercase;
       font-size: 15px;
       letter-spacing: .05em;
@@ -326,7 +327,7 @@ $yellow:#f5bc04;
 
 .blog-single-content {
   z-index: 999;
-  background: white;
+  background: black;
 
   p, ul li {
     font-size: 1.05rem;

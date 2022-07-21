@@ -25,13 +25,38 @@ const initialState = { // initial state for our form
 }
 
 const categoryOption = [
-    "Fashion",
-    "Technology",
-    "Food",
-    "Politics",
-    "Sports",
-    "Business",
-    "Mistery"
+    "Lost",
+    "Found",
+    "Adoption"
+]
+
+const animalType = [
+    "Dog",
+    "Cat",
+    "Bird",
+    "Rabbit",
+    "Rodent",
+    "Reptile",
+    "Hedgehog",
+    "Other"
+]
+
+const genderType = [
+    "Female",
+    "Male",
+    "Other"
+]
+
+const hairType = [
+    "NoHair",
+    "Short",
+    "Medium",
+    "Long"
+]
+
+const eyesType = [
+    "Dark",
+    "Light"
 ]
 
 export default function AddEditBlog({ user, setActive }) {
@@ -49,7 +74,7 @@ export default function AddEditBlog({ user, setActive }) {
   /*  const imageListRef = ref(storage, "images/") // to use in useEffect (listAll), because we
     // wanna access all the files inside the images folder
 */
-    const { title, tags, category, trending, description} = form;
+    const { title, tags, category, trending, description, type, breed, gender, hair, eyes, idCollar, idChip, phone} = form;
 
     // OPTION THAT DIDN'T WORK BUT IT'S GOOD ALTERNATIVE TO UPLOAD FILES
 
@@ -164,10 +189,35 @@ export default function AddEditBlog({ user, setActive }) {
         setForm({ ...form, category: event.target.value })
     }
 
+    const onTypeChange = (event) => {
+        setForm({ ...form, type: event.target.value })
+    }
+
+    const onGenderChange = (event) => {
+        setForm({ ...form, gender: event.target.value })
+    }
+
+    const onHairChange = (event) => {
+        setForm({ ...form, hair: event.target.value })
+    }
+
+    const onEyesChange = (event) => {
+        setForm({ ...form, eyes: event.target.value })
+    }
+
+    const handleIdCollar = (event) => {
+        setForm({ ...form, idCollar: event.target.value })
+    }
+
+    const handleIdChip = (event) => {
+        setForm({ ...form, idChip: event.target.value })
+    }
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (category && tags && title && description && trending) {
+        if (category && tags && title && description && trending && type && breed && gender && hair && eyes && idCollar && idChip && phone) {
             if(!id) {
                 try {
                     await addDoc(collection(db, "blogs"), {
@@ -212,6 +262,136 @@ export default function AddEditBlog({ user, setActive }) {
                 <div className="row h-100 justify-content-center align-items-center">
                     <div className="col-10 col-md-8 col-lg-6">
                         <form className="row blog-form" onSubmit={handleSubmit}>
+                            <div className="col-12 py-3">
+                                <select
+                                    value={type}
+                                    onChange={onTypeChange}
+                                    className="catg-dropdown"
+                                >
+                                    <option>Animal type</option>
+                                    {animalType.map((option, index) => (
+                                        <option value={option || ""} key={index}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12 py-3">
+                                <input
+                                    type="text"
+                                    className="form-control input-text-box"
+                                    placeholder="Breed"
+                                    name="breed"
+                                    value={breed}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="col-12 py-3">
+                                <select
+                                    value={gender}
+                                    onChange={onGenderChange}
+                                    className="catg-dropdown"
+                                >
+                                    <option>Gender</option>
+                                    {genderType.map((option, index) => (
+                                        <option value={option || ""} key={index}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12 py-3">
+                                <select
+                                    value={hair}
+                                    onChange={onHairChange}
+                                    className="catg-dropdown"
+                                >
+                                    <option>Hair Type</option>
+                                    {hairType.map((option, index) => (
+                                        <option value={option || ""} key={index}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12 py-3">
+                                <select
+                                    value={eyes}
+                                    onChange={onEyesChange}
+                                    className="catg-dropdown"
+                                >
+                                    <option>Eyes Type</option>
+                                    {eyesType.map((option, index) => (
+                                        <option value={option || ""} key={index}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12 py-3">
+                                <p className="trending">Identification collar?</p>
+                                <div className="form-check-inline mx-2">
+                                    <input
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="yes"
+                                        name="radioOptionCollar"
+                                        checked={idCollar === "yes"}
+                                        onChange={handleIdCollar}
+                                    />
+                                    <label htmlFor="radioOption" className="form-check-label">
+                                        Yes&nbsp;
+                                    </label>
+                                    <input
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="no"
+                                        name="radioOptionCollar"
+                                        checked={idCollar === "no"}
+                                        onChange={handleIdCollar}
+                                    />
+                                    <label htmlFor="radioOption" className="form-check-label">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-12 py-3">
+                                <p className="trending">Identification chip?</p>
+                                <div className="form-check-inline mx-2">
+                                    <input
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="yes"
+                                        name="radioOptionChip"
+                                        checked={idChip === "yes"}
+                                        onChange={handleIdChip}
+                                    />
+                                    <label htmlFor="radioOption" className="form-check-label">
+                                        Yes&nbsp;
+                                    </label>
+                                    <input
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="no"
+                                        name="radioOptionChip"
+                                        checked={idChip === "no"}
+                                        onChange={handleIdChip}
+                                    />
+                                    <label htmlFor="radioOption" className="form-check-label">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-12 py-3">
+                                <input
+                                    type="text"
+                                    className="form-control input-text-box"
+                                    placeholder="Phone number"
+                                    name="phone"
+                                    value={phone}
+                                    onChange={handleChange}
+                                />
+                            </div>
                             <div className="col-12 py-3">
                                 <input
                                     type="text"
