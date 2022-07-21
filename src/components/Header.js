@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import transitions from 'bootstrap';
 
 export default function Header({active, setActive, user, handleLogout }) {
     const userId = user?.uid
@@ -21,9 +22,8 @@ export default function Header({active, setActive, user, handleLogout }) {
                         >
                             <span className="fa fa-bars"></span>
                         </button>
-                        <div className="collapse navbar-collapse">
+                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0"
-                                id="navbarSupportedContent"
                             >
                                 <Link to="/" style={{ textDecoration: "none" }}>
                                     <li

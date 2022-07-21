@@ -30,7 +30,8 @@ const categoryOption = [
     "Food",
     "Politics",
     "Sports",
-    "Business"
+    "Business",
+    "Mistery"
 ]
 
 export default function AddEditBlog({ user, setActive }) {
@@ -50,7 +51,7 @@ export default function AddEditBlog({ user, setActive }) {
 */
     const { title, tags, category, trending, description} = form;
 
-    // OPTION THAT DIND'T WORK BUT IT'S GOOD ALTERNATIVE TO UPLOAD FILES
+    // OPTION THAT DIDN'T WORK BUT IT'S GOOD ALTERNATIVE TO UPLOAD FILES
 
    /* const uploadImage = () => {
         if(imageUpload == null) return; // if there's no image, return and get out of this function
@@ -98,7 +99,7 @@ export default function AddEditBlog({ user, setActive }) {
 
     useEffect(() => {
         const uploadFile = () => {
-            const storageRef = ref(storage, file.name);
+            const storageRef = ref(storage, `images/${file.name + v4()}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
                 "state_changed",
@@ -133,10 +134,19 @@ export default function AddEditBlog({ user, setActive }) {
         file && uploadFile();
     }, [file]);
 
-/*    useEffect(() => {
+    useEffect(() => {
         id && getBlogDetail();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);*/
+
+    }, [id]);
+
+    const getBlogDetail = async () => {
+        const docRef = doc(db, "blogs", id)
+        const snapshot = await getDoc(docRef)
+        if(snapshot.exists()) {
+            setForm({ ...snapshot.data() })
+        }
+        setActive(null)
+    }
 
     const handleChange = (event) => {
         setForm({...form, [event.target.name]: event.target.value})
@@ -158,18 +168,31 @@ export default function AddEditBlog({ user, setActive }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (category && tags && title && description && trending) {
-            try {
-                await addDoc(collection(db, "blogs"), {
-                    ...form,
-                    timestamp: serverTimestamp(),
-                    author: user.displayName,
-                    userId: user.uid
-                })
-                toast.success("Blog created successfully");
-            } catch(error) {
-                console.log(error)
+            if(!id) {
+                try {
+                    await addDoc(collection(db, "blogs"), {
+                        ...form,
+                        timestamp: serverTimestamp(),
+                        author: user.displayName,
+                        userId: user.uid
+                    })
+                    toast.success("Blog created successfully");
+                } catch(error) {
+                    console.log(error)
+                }
+            } else {    // if we have the id
+                try {
+                    await updateDoc(doc(db, "blogs", id), {
+                        ...form,
+                        timestamp: serverTimestamp(),
+                        author: user.displayName,
+                        userId: user.uid
+                    })
+                    toast.success("Blog updated successfully");
+                } catch(error) {
+                    console.log(error)
+                }
             }
-
         } else {
             return toast.error("All fields are mandatory to fill");
         }
@@ -280,7 +303,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     //onClick={uploadImage}
                                     disabled={progress !== null && progress < 100}
                                 >
-                                    Submit
+                                    { id ? "Update" : "Submit"}
                                 </button>
                             </div>
                         </form>
