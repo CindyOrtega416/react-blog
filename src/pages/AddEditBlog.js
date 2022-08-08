@@ -25,38 +25,38 @@ const initialState = { // initial state for our form
 }
 
 const categoryOption = [
-    "Lost",
-    "Found",
-    "Adoption"
+    "Perdido",
+    "Encontrado",
+    "Adopción"
 ]
 
 const animalType = [
-    "Dog",
-    "Cat",
-    "Bird",
-    "Rabbit",
-    "Rodent",
+    "Perro",
+    "Gato",
+    "Ave",
+    "Conejo",
+    "Roedor",
     "Reptile",
-    "Hedgehog",
-    "Other"
+    "Erizo",
+    "Otro"
 ]
 
 const genderType = [
-    "Female",
-    "Male",
-    "Other"
+    "Hembra",
+    "Macho",
+    "Otro"
 ]
 
 const hairType = [
-    "NoHair",
-    "Short",
-    "Medium",
-    "Long"
+    "Sin Pelo",
+    "Corto",
+    "Medio",
+    "Largo"
 ]
 
 const eyesType = [
-    "Dark",
-    "Light"
+    "Oscuros",
+    "Claros"
 ]
 
 export default function AddEditBlog({ user, setActive }) {
@@ -149,7 +149,7 @@ export default function AddEditBlog({ user, setActive }) {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-                        toast.info("Image upload to firebase successfully");
+                        toast.info("Imagen subida con éxito");
                         setForm((prev) => ({ ...prev, imgUrl: downloadUrl }));
                     });
                 }
@@ -226,7 +226,7 @@ export default function AddEditBlog({ user, setActive }) {
                         author: user.displayName,
                         userId: user.uid
                     })
-                    toast.success("Blog created successfully");
+                    toast.success("Reporte creado con éxito");
                 } catch(error) {
                     console.log(error)
                 }
@@ -238,13 +238,13 @@ export default function AddEditBlog({ user, setActive }) {
                         author: user.displayName,
                         userId: user.uid
                     })
-                    toast.success("Blog updated successfully");
+                    toast.success("Reporte actualizado con éxito");
                 } catch(error) {
                     console.log(error)
                 }
             }
         } else {
-            return toast.error("All fields are mandatory to fill");
+            return toast.error("Todos los campos son obligatorios");
         }
         navigate("/")
     }
@@ -256,7 +256,7 @@ export default function AddEditBlog({ user, setActive }) {
             <div className="container">
                 <div className="col-12">
                     <div className="text-center heading py-2">
-                        {id ? "Update Blog" : "Create Blog"}
+                        {id ? "Actualizar Reporte" : "Crear Reporte"}
                     </div>
                 </div>
                 <div className="row h-100 justify-content-center align-items-center">
@@ -268,7 +268,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     onChange={onTypeChange}
                                     className="catg-dropdown"
                                 >
-                                    <option>Animal type</option>
+                                    <option>Tipo de animal</option>
                                     {animalType.map((option, index) => (
                                         <option value={option || ""} key={index}>
                                             {option}
@@ -280,7 +280,7 @@ export default function AddEditBlog({ user, setActive }) {
                                 <input
                                     type="text"
                                     className="form-control input-text-box"
-                                    placeholder="Breed"
+                                    placeholder="Raza"
                                     name="breed"
                                     value={breed}
                                     onChange={handleChange}
@@ -292,7 +292,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     onChange={onGenderChange}
                                     className="catg-dropdown"
                                 >
-                                    <option>Gender</option>
+                                    <option>Género</option>
                                     {genderType.map((option, index) => (
                                         <option value={option || ""} key={index}>
                                             {option}
@@ -306,7 +306,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     onChange={onHairChange}
                                     className="catg-dropdown"
                                 >
-                                    <option>Hair Type</option>
+                                    <option>Tipo de pelo</option>
                                     {hairType.map((option, index) => (
                                         <option value={option || ""} key={index}>
                                             {option}
@@ -320,7 +320,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     onChange={onEyesChange}
                                     className="catg-dropdown"
                                 >
-                                    <option>Eyes Type</option>
+                                    <option>Tipo de ojos</option>
                                     {eyesType.map((option, index) => (
                                         <option value={option || ""} key={index}>
                                             {option}
@@ -329,7 +329,7 @@ export default function AddEditBlog({ user, setActive }) {
                                 </select>
                             </div>
                             <div className="col-12 py-3">
-                                <p className="trending">Identification collar?</p>
+                                <p className="trending">¿Collar Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
                                         type="radio"
@@ -340,7 +340,7 @@ export default function AddEditBlog({ user, setActive }) {
                                         onChange={handleIdCollar}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
-                                        Yes&nbsp;
+                                        Si&nbsp;
                                     </label>
                                     <input
                                         type="radio"
@@ -356,7 +356,7 @@ export default function AddEditBlog({ user, setActive }) {
                                 </div>
                             </div>
                             <div className="col-12 py-3">
-                                <p className="trending">Identification chip?</p>
+                                <p className="trending">¿Chip Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
                                         type="radio"
@@ -367,7 +367,7 @@ export default function AddEditBlog({ user, setActive }) {
                                         onChange={handleIdChip}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
-                                        Yes&nbsp;
+                                        Si&nbsp;
                                     </label>
                                     <input
                                         type="radio"
@@ -386,7 +386,7 @@ export default function AddEditBlog({ user, setActive }) {
                                 <input
                                     type="text"
                                     className="form-control input-text-box"
-                                    placeholder="Phone number"
+                                    placeholder="Número de telefono"
                                     name="phone"
                                     value={phone}
                                     onChange={handleChange}
@@ -396,7 +396,7 @@ export default function AddEditBlog({ user, setActive }) {
                                 <input
                                     type="text"
                                     className="form-control input-text-box"
-                                    placeholder="Title"
+                                    placeholder="Título"
                                     name="title"
                                     value={title}
                                     onChange={handleChange}
@@ -405,12 +405,12 @@ export default function AddEditBlog({ user, setActive }) {
                             <div className="col-12 py-3">
                                 <ReactTagInput
                                     tags={tags}
-                                    placeholder="Tags"
+                                    placeholder="Etiquetas"
                                     onChange={handleTags}
                                 />
                             </div>
                             <div className="col-12 py-3">
-                                <p className="trending">Is it trending blog ?</p>
+                                <p className="trending">¿Es un reporte en tendencia?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
                                         type="radio"
@@ -421,7 +421,7 @@ export default function AddEditBlog({ user, setActive }) {
                                         onChange={handleTrending}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
-                                        Yes&nbsp;
+                                        Si&nbsp;
                                     </label>
                                     <input
                                         type="radio"
@@ -442,7 +442,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     onChange={onCategoryChange}
                                     className="catg-dropdown"
                                 >
-                                    <option>Please select category</option>
+                                    <option>Por favor, seleccione una categoria</option>
                                     {categoryOption.map((option, index) => (
                                         <option value={option || ""} key={index}>
                                             {option}
@@ -453,7 +453,7 @@ export default function AddEditBlog({ user, setActive }) {
                             <div className="col-12 py-3">
                 <textarea
                     className="form-control description-box"
-                    placeholder="Description"
+                    placeholder="Descripción"
                     value={description}
                     name="description"
                     onChange={handleChange}
@@ -483,7 +483,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     //onClick={uploadImage}
                                     disabled={progress !== null && progress < 100}
                                 >
-                                    { id ? "Update" : "Submit"}
+                                    { id ? "Actualizar" : "Crear"}
                                 </button>
                             </div>
                         </form>
