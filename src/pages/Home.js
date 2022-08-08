@@ -15,6 +15,7 @@ import {toast} from "react-toastify";
 import Tags from "../components/Tags";
 import MostPopular from "../components/MostPopular";
 import Trending from "../components/Trending";
+import Filter from "../components/Filter";
 
 export default function Home({ setActive, user }) {
     const [loading, setLoading] = useState(true)
@@ -94,6 +95,7 @@ export default function Home({ setActive, user }) {
                         />
                     </div>
                     <div className="col-md-3">
+                        <Filter blogs={blogs} />
                         <Tags tags={tags}/>
                         <MostPopular blogs={blogs} />
                     </div>
