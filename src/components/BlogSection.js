@@ -7,7 +7,7 @@ const BlogSection = ({ blogs, user, handleDelete }) => {
     const userId = user?.uid;
     return (
         <div>
-            <div className="blog-heading text-start py-2 mb-4">Daily Blogs</div>
+            <div className="blog-heading text-start py-2 mb-4">Reportes</div>
             {blogs?.map((item) => (
                 <div className="row pb-4" key={item.id}>
                     <div className="col-md-5">
@@ -31,7 +31,7 @@ const BlogSection = ({ blogs, user, handleDelete }) => {
                             {excerpt(item.description, 120)}
                         </div>
                         <Link to={`/detail/${item.id}`}>
-                            <button className="btn btn-read">Read More</button>
+                            <button className="btn btn-read">Ver más</button>
                         </Link>
                         {userId && item.userId === userId && ( // I can delete a blog (and view the delete icon) only if I have a userId and the userId is equal to the userId linked to the blog (item)
                             <div style={{ float: "right" }}>
