@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { IndividualFilteredCategory } from './IndividualFilteredCategory';
 
 const categoryOption = [
     "Perdido",
@@ -6,7 +7,7 @@ const categoryOption = [
     "Adopción"
 ]
 
-export default function Filter({ blogs }) {
+export default function Filter({ setActive }) {
 
     const [filteredCategory, setFilteredCategory] = useState([])
 
@@ -28,6 +29,17 @@ export default function Filter({ blogs }) {
                         ))}
                     </select>
                 </div>
+                {
+                    filteredCategory.length > 0&&(
+                        <IndividualFilteredCategory />
+                    )}
+                    {
+                        filteredCategory.length < 1&&(
+                           <>
+                           {blog?.category}
+                           </> 
+                        )
+                    }
             {
                 blogs?.map((item)=> {
                     

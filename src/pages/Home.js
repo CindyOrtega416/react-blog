@@ -95,7 +95,7 @@ export default function Home({ setActive, user }) {
                         />
                     </div>
                     <div className="col-md-3">
-                        <Filter blogs={blogs} />
+                        <Filter setActive={setActive} />
                         <Tags tags={tags}/>
                         <MostPopular blogs={blogs} />
                     </div>
