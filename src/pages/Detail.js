@@ -57,7 +57,7 @@ export default function Detail({ setActive }) {
                                 </div>
                                 <div className="col-md-8">
                                     <div className="card-body p-4">
-                                        <h6>Information</h6>
+                                        <h6>Información</h6>
                                         <hr className="mt-0 mb-4"/>
                                             <div className="row pt-1">
                                                 <div className="col-4 mb-3">
@@ -65,41 +65,41 @@ export default function Detail({ setActive }) {
                                                     <p className="text-muted">{blog?.type}</p>
                                                 </div>
                                                 <div className="col-4 mb-3">
-                                                    <h6>Breed</h6>
+                                                    <h6>Raza</h6>
                                                     <p className="text-muted">{blog?.breed}</p>
                                                 </div>
                                                 <div className="col-4 mb-3">
-                                                    <h6>Phone</h6>
+                                                    <h6>Teléfono</h6>
                                                     <p className="text-muted">{blog?.phone}</p>
                                                 </div>
                                             </div>
-                                            <h6>Extra information</h6>
+                                            <h6>Información Extra</h6>
                                             <hr className="mt-0 mb-4" />
                                         <div className="row pt-1">
                                                 <div className="col-4 mb-3">
-                                                    <h6>Gender</h6>
+                                                    <h6>Género</h6>
                                                     <p className="text-muted">{blog?.gender}</p>
                                                 </div>
                                         <div className="col-4 mb-3">
-                                            <h6>Hair Type</h6>
+                                            <h6>Tipo de pelo</h6>
                                             <p className="text-muted">{blog?.hair}</p>
                                         </div>
                                         <div className="col-4 mb-3">
-                                            <h6>Eye Color</h6>
+                                            <h6>Color de ojos</h6>
                                             <p className="text-muted">{blog?.eyes}</p>
                                         </div>
                                         </div>
                                         <div className="row pt-1">
                                             <div className="col-4 mb-3">
-                                                <h6>Id Collar?</h6>
+                                                <h6>¿Collar?</h6>
                                                 <p className="text-muted">{blog?.idCollar}</p>
                                             </div>
                                             <div className="col-4 mb-3">
-                                                <h6>Id Chip?</h6>
+                                                <h6>¿Chip?</h6>
                                                 <p className="text-muted">{blog?.idChip}</p>
                                             </div>
                                             <div className="col-4 mb-3">
-                                                <h6>Date of event?</h6>
+                                                <h6>¿Fecha de suceso?</h6>
                                                 <p className="text-muted">{blog?.timestamp.toDate().toDateString()}</p>
                                             </div>
                                         </div>

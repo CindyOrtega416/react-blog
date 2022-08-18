@@ -4,7 +4,7 @@ export default function Tags({ tags }) {
     return (
         <div>
             <div>
-                <div className="blog-heading text-start py-2 mb-4">Tags</div>
+                <div className="blog-heading text-start py-2 mb-4">Etiquetas</div>
             </div>
             <div className="tags">
                 {tags?.map((tag, index) => (

@@ -32,7 +32,7 @@ export default function Header({active, setActive, user, handleLogout }) {
                                         }`}
                                         onClick={() => setActive("home")}
                                     >
-                                        Home
+                                        Inicio
                                     </li>
                                 </Link>
 
@@ -43,7 +43,7 @@ export default function Header({active, setActive, user, handleLogout }) {
                                         }`}
                                         onClick={() => setActive("create")}
                                     >
-                                        Create
+                                        Crear
                                     </li>
                                 </Link>
 
@@ -54,7 +54,7 @@ export default function Header({active, setActive, user, handleLogout }) {
                                         }`}
                                         onClick={() => setActive("about")}
                                     >
-                                        About
+                                        Acerca
                                     </li>
                                 </Link>
 
@@ -79,7 +79,7 @@ export default function Header({active, setActive, user, handleLogout }) {
                                                 {user?.displayName}
                                             </p>
                                             <li className="nav-item nav-link" onClick={handleLogout}>
-                                                Logout
+                                                Salir
                                             </li>
                                         </>
                                     ) : (
@@ -90,7 +90,7 @@ export default function Header({active, setActive, user, handleLogout }) {
                                                 }`}
                                                 onClick={() => setActive("login")}
                                             >
-                                                Login
+                                                Iniciar Sesión
                                             </li>
                                         </Link>
                                     )}
