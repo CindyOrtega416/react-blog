@@ -20,9 +20,12 @@ import Filter from "../components/Filter";
 export default function Home({ setActive, user }) {
     const [loading, setLoading] = useState(true)
     const [blogs, setBlogs] = useState([])
+    const [filters, setFilters] = useState([])
     const [tags, setTags] = useState([])
     const [trendBlogs, setTrendBlogs] = useState([])
 
+    const [activeCategory, setActiveCategory] = useState('Todos')
+    const [activeGender, setActiveGender] = useState('Todos')
     const getTrendingBlogs = async () => {
         const blogRef = collection(db, "blogs")
         const trendQuery = query(blogRef, where("trending", "==", "yes")) // bring only blogs that match trending == yes
@@ -49,6 +52,7 @@ export default function Home({ setActive, user }) {
                 const uniqueTags = [...new Set(tags)]
                 setTags(uniqueTags)
                 setBlogs(list)
+                setFilters(list)
                 setLoading(false)
                 setActive("home")
 
@@ -88,14 +92,22 @@ export default function Home({ setActive, user }) {
                 <div className="row mx-0">
                     <Trending blogs={trendBlogs} />
                     <div className="col-md-8">
-                        <BlogSection
-                            blogs={blogs}
-                            user={user}
-                            handleDelete={handleDelete}
-                        />
+                                <BlogSection
+                                    filters={filters}
+                                    blogs={blogs}
+                                    user={user}
+                                    handleDelete={handleDelete}
+                                />
                     </div>
                     <div className="col-md-3">
-                        <Filter setActive={setActive} />
+                        <Filter
+                            blogs={blogs}
+                            setFilters={setFilters}
+                            activeCategory={activeCategory}
+                            setActiveCategory={setActiveCategory}
+                            activeGender={activeGender}
+                            setActiveGender={setActiveGender}
+                        />
                         <Tags tags={tags}/>
                         <MostPopular blogs={blogs} />
                     </div>
