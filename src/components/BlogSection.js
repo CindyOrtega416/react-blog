@@ -3,12 +3,12 @@ import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
 import { excerpt } from "../utility";
 
-const BlogSection = ({ blogs, user, handleDelete }) => {
+const BlogSection = ({ blogs, user, handleDelete, filters}) => {
     const userId = user?.uid;
     return (
         <div>
             <div className="blog-heading text-start py-2 mb-4">Reportes</div>
-            {blogs?.map((item) => (
+            {filters?.map((item) => (
                 <div className="row pb-4" key={item.id}>
                     <div className="col-md-5">
                         <div className="hover-blogs-img">
