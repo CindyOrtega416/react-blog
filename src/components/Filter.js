@@ -60,59 +60,57 @@ export default function Filter({ activeCategory, setActiveCategory, activeGender
     }, [activeCategory, activeGender, blogs, setFilters])
 
     return (
-    
+
         <div>
-            <div className="blog-heading text-start pt-3 py-2 mb-4">Filtrar</div>
-            <div>
-                {categoryOption.map(item=>(
-                    <>
-                {/*    <select className="catg-dropdown">
-                        <option>Categoría</option>
-                        <option value={item.name || ""} key={item.id}>
-                            {item.name}
-                        </option>
-                    </select>*/}
-                    <button
-                        onClick={()=>setActiveCategory(item.name)}
-                        key={item.id}
-                        className={`bg-white border-2 rounded-lg 
-                        px-4 py-2 mr-2 mb-2 ${activeCategory === item.name && ' ' +
-                    'bg-primary font-bold'}`} >
-                        {item.name}
-                    </button>
-                    </>
-                ))}
-            </div>
-            <div>
-                {genderOption.map(item=> (
-                    <button
-                        className={`bg-white border-2 rounded-lg 
-                        px-4 py-2 mr-2 mb-2 ${activeGender === item.name && ' ' +
-                        ' font-bold'}`}
-                        onClick={()=>setActiveGender(item.name)}
-                        key={item.id}>
-                        {item.name}
-                    </button>
-                ))}
-            </div>
-            {/*{blogs?.map((item)=> (
-                <div className="col-12 py-3">
-                    <select
-                        className="catg-dropdown"
-                    >
-                        <option>Category</option>
-                       { categoryOption.map((option, index) => (
-                            <option value={option || ""} key={index}>
-                                {option}
-                            </option>
+           <div className="blog-heading text-start pt-3 py-2 mb-4">Filtrar</div>
+            <div className='py-3'>
+                <div className='row'>
+                    <div className='col-6'>
+                        <h5 className="font-weight-bold">Categorias</h5>
+                            <div className='card-body d-flex justify-content-center'>
+                                <div>
+                                    {categoryOption.map(item=>(
+                                        <div className="form-check" >
+                                            <input
+                                                type="radio"
+                                                className="form-check-input"
+                                                value={item.name}
+                                                name="Category"
+                                                onClick={()=>setActiveCategory(item.name)}
+                                            />
+                                            {item.name}
+                                        
+                                        </div>
                         ))}
-                    </select>
+                                </div>
+                            </div>
+                    </div>
 
+                            <div className='col-6'>
+                                <h5 className="font-weight-bold">Género</h5>
+                                    <div className='card-body d-flex justify-content-center'>
+                                        <div>
+                                            {genderOption.map(item=> (
+                                                <div className="form-check" >
+                                                    <input
+                                                        type="radio"
+                                                        className="form-check-input"
+                                                        value={item.name}
+                                                        name="Género"
+                                                        onClick={()=>setActiveGender(item.name)}
+                                                    />
+                                                    {item.name}
+                                    
+                                    </div>
+                                ))}
+                                        </div>
+                                    </div>
+                            </div>
                 </div>
+            </div> 
+        </div> 
+    
 
-            ))}
-            */}
-        </div>
     );
 }
 
