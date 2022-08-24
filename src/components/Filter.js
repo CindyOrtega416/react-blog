@@ -4,44 +4,20 @@ import {useParams} from "react-router-dom";
 import {collection, doc, getDoc, getDocs} from "firebase/firestore";
 import {db} from "../firebase";
 
-const categoryOption = [
-    {
-        id:1,
-        name: 'Todos'
-    },
-    {
-        id:2,
-        name: 'Perdido'
-    },
-    {
-        id:3,
-        name: 'Encontrado'
-    },
-    {
-        id:4,
-        name: 'Adopción'
-    }
-]
 
-const genderOption = [
-    {
-        id: 1,
-        name: 'Todos'
-    },
-    {
-        id: 2,
-        name: 'Macho'
-    },
-    {
-        id: 3,
-        name: 'Hembra'
-    }
-]
-
-export default function Filter({ activeCategory, setActiveCategory, activeGender, setActiveGender, blogs, setFilters }) {
+export default function Filter({ 
+    activeCategory, setActiveCategory, 
+    activeGender, setActiveGender, 
+    activeAnimal, setActiveAnimal,
+    blogs, 
+    setFilters, 
+    categoryOption,
+    genderOption,
+    animalType
+     }) {
 
     useEffect(()=> {
-        if(activeCategory === 'Todos' && activeGender === 'Todos'){
+        if(activeCategory === 'Todos' && activeGender === 'Todos' && activeAnimal === 'Todos'){
             setFilters(blogs)
             return
         }
@@ -54,10 +30,14 @@ export default function Filter({ activeCategory, setActiveCategory, activeGender
             activeGender === 'Todos' ? item : item.gender === activeGender
         )
 
+        const filterAnimal = filterGender.filter((item)=>
+            activeAnimal === 'Todos' ? item : item.type === activeAnimal
+        )
+
 
         setFilters(filterGender)
 
-    }, [activeCategory, activeGender, blogs, setFilters])
+    }, [activeCategory, activeGender, activeAnimal, blogs, setFilters])
 
     return (
 
@@ -106,11 +86,35 @@ export default function Filter({ activeCategory, setActiveCategory, activeGender
                                         </div>
                                     </div>
                             </div>
+
+                            <div className='py-3'>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h5 className="font-weight-bold">Tipo de Animal</h5>
+                                            <div className='card-body d-flex justify-content-center'>
+                                                <div>
+                                                    {animalType.map(item=> (
+                                                        <div className="form-check" >
+                                                            <input
+                                                                type="radio"
+                                                                className="form-check-input"
+                                                                value={item.name}
+                                                                name="TipoAnimal"
+                                                                onClick={()=>setActiveAnimal(item.name)}
+                                                            />
+                                                            {item.name}
+                                            
+                                            </div>
+                                    ))}
+                                            </div>
+                                        </div>
+                                </div>
+
+                                </div>
+                            </div>
                 </div>
             </div> 
         </div> 
-    
-
     );
 }
 

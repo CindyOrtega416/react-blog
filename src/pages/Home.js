@@ -16,6 +16,7 @@ import Tags from "../components/Tags";
 import MostPopular from "../components/MostPopular";
 import Trending from "../components/Trending";
 import Filter from "../components/Filter";
+import { categoryOption, genderOption, animalType } from "../utility/FilterOptions";
 
 export default function Home({ setActive, user }) {
     const [loading, setLoading] = useState(true)
@@ -26,6 +27,8 @@ export default function Home({ setActive, user }) {
 
     const [activeCategory, setActiveCategory] = useState('Todos')
     const [activeGender, setActiveGender] = useState('Todos')
+    const [activeAnimal, setActiveAnimal] = useState('Todos')
+
     const getTrendingBlogs = async () => {
         const blogRef = collection(db, "blogs")
         const trendQuery = query(blogRef, where("trending", "==", "yes")) // bring only blogs that match trending == yes
@@ -107,6 +110,9 @@ export default function Home({ setActive, user }) {
                             setActiveCategory={setActiveCategory}
                             activeGender={activeGender}
                             setActiveGender={setActiveGender}
+                            categoryOption={categoryOption}
+                            genderOption={genderOption}
+                            animalType={animalType}
                         />
                         <Tags tags={tags}/>
                         <MostPopular blogs={blogs} />

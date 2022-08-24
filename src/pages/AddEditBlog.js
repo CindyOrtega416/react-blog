@@ -44,7 +44,7 @@ const animalType = [
 const genderType = [
     "Hembra",
     "Macho",
-    "Otro"
+    "No sé"
 ]
 
 const hairType = [
@@ -217,7 +217,7 @@ export default function AddEditBlog({ user, setActive }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (category && tags && title && description && trending && type && breed && gender && hair && eyes && idCollar && idChip && phone) {
+        if (category && title && trending && gender && phone && type) {
             if(!id) {
                 try {
                     await addDoc(collection(db, "blogs"), {
