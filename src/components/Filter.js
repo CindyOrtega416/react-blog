@@ -13,10 +13,10 @@ export default function Filter({
     setFilters, 
     categoryOption,
     genderOption,
-    animalType
+    animalType,
      }) {
 
-    useEffect(()=> {
+  /*  useEffect(()=> {
         if(activeCategory === 'Todos' && activeGender === 'Todos' && activeAnimal === 'Todos'){
             setFilters(blogs)
             return
@@ -37,7 +37,7 @@ export default function Filter({
 
         setFilters(filterGender)
 
-    }, [activeCategory, activeGender, activeAnimal, blogs, setFilters])
+    }, [activeCategory, activeGender, activeAnimal, blogs, setFilters])] */
 
     return (
 

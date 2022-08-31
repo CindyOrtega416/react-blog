@@ -8,7 +8,7 @@ const BlogSection = ({ blogs, user, handleDelete, filters}) => {
     return (
         <div>
             <div className="blog-heading text-start py-2 mb-4">Reportes</div>
-            {filters?.map((item) => (
+            {blogs?.map((item) => (
                 <div className="row pb-4" key={item.id}>
                     <div className="col-md-5">
                         <div className="hover-blogs-img">

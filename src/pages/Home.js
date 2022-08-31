@@ -24,6 +24,7 @@ export default function Home({ setActive, user }) {
     const [filters, setFilters] = useState([])
     const [tags, setTags] = useState([])
     const [trendBlogs, setTrendBlogs] = useState([])
+    const [categoryBlogs, setCategoryBlogs] = useState([])
 
     const [activeCategory, setActiveCategory] = useState('Todos')
     const [activeGender, setActiveGender] = useState('Todos')
@@ -41,10 +42,35 @@ export default function Home({ setActive, user }) {
 
     }
 
-    useEffect(()=> {
-        getTrendingBlogs()
+    console.log("activeCategory", activeCategory)
+
+    const getCategoryBlogs = async () => {
+        const blogRef = collection(db, "blogs")
+        const categoryQuery = query(blogRef, where("category", "==", activeCategory))
+        
+      /*  const unsubscribe = onSnapshot(categoryQuery, (querySnapshot) => {
+            let categoryBlogs = [];
+            querySnapshot.forEach((doc) => {
+                categoryBlogs.push(doc.data())
+            })
+
+           
+        })*/
+        const querySnapshot = await getDocs(categoryQuery)
+        let categoryBlogs = []
+        querySnapshot.forEach((doc) => {
+            categoryBlogs.push({id: doc.id, ...doc.data() })
+        }) 
+        setCategoryBlogs(categoryBlogs)
+        console.log('CategoryCladdifiedBlog: ', categoryBlogs)
+    }
+
+    const render = () => {
+
+    
+    if(activeCategory === 'Todos' && activeGender === 'Todos' && activeAnimal === 'Todos'){
         const unsub = onSnapshot(
-            collection(db, "blogs"),
+            collection(db, "blogs"), 
             (snapshot) => {
                 let list = []
                 let tags = []
@@ -66,9 +92,47 @@ export default function Home({ setActive, user }) {
 
         return () => {
             unsub()
-            getTrendingBlogs()
+            getCategoryBlogs()
         }
-    }, [])
+    } 
+        getCategoryBlogs()
+        const unsub = onSnapshot(
+            query(collection(db, "blogs"), 
+            where("category", "==", activeCategory), 
+             where("type", "==", activeAnimal),
+            where("gender", "==", activeGender)),
+           
+            (snapshot) => {
+                let list = []
+                let tags = []
+                snapshot.docs.forEach((doc) => {
+                    tags.push(...doc.get("tags"))
+                    list.push({id: doc.id, ...doc.data()})
+                })
+                const uniqueTags = [...new Set(tags)]
+                setTags(uniqueTags)
+                setBlogs(list)
+                setFilters(list)
+                setLoading(false)
+                setActive("home")
+
+            }, (error) => {
+                console.log(error)
+            }
+        )
+
+        return () => {
+            unsub()
+            getCategoryBlogs()
+        }
+    
+}
+
+
+        useEffect(()=> {
+           render()
+        }, [])
+    
 
     if(loading) {
         return <Spinner />
@@ -93,7 +157,7 @@ export default function Home({ setActive, user }) {
         <div className="container-fluid pb-4 pt-4 padding">
             <div className="container padding">
                 <div className="row mx-0">
-                    <Trending blogs={trendBlogs} />
+                    <Trending blogs={categoryBlogs} />
                     <div className="col-md-8">
                                 <BlogSection
                                     filters={filters}
@@ -110,6 +174,8 @@ export default function Home({ setActive, user }) {
                             setActiveCategory={setActiveCategory}
                             activeGender={activeGender}
                             setActiveGender={setActiveGender}
+                            activeAnimal={activeAnimal}
+                            setActiveAnimal={setActiveAnimal}
                             categoryOption={categoryOption}
                             genderOption={genderOption}
                             animalType={animalType}
