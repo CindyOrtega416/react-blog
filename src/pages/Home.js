@@ -59,10 +59,9 @@ export default function Home({ setActive, user }) {
             list.push({ id: doc.id, ...doc.data() })
         })
         lastDoc = snapshot.docs[snapshot.docs.length - 1 ]
+        firstDoc = snapshot.docs[0]
 
         list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
-
-        firstDoc = list[0]
 
         setBlogs(list)
         setFilters(list)
@@ -71,10 +70,37 @@ export default function Home({ setActive, user }) {
         setLastDoc(lastDoc)
         setFirstDoc(firstDoc)
 
+
+    }
+
+/*--------------------------Get data - snapshot - prev page-------------*/
+
+    const updateDocsPrev = (snapshot) => {  //snapshot no tiene .docs acá
+                            // porque al .docs se lo paso tmb como parametro
+                            // en el boton prev más abajo (para
+                            // poder hacer snapshot.docs.reverse)
+        let list = []
+        snapshot.forEach((doc) => {
+            list.push({ id: doc.id, ...doc.data() })
+        })
+        lastDoc = snapshot[snapshot.length - 1 ]
+        firstDoc = snapshot[0]
+
+        list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+
+        setBlogs(list)
+        setFilters(list)
+        setLoading(false)
+        setActive("home")
+        setLastDoc(lastDoc)
+        setFirstDoc(firstDoc)
+
+        console.log("first doc", firstDoc)
+
     }
 
 
-/*----------------------Conditionals and queries----------------------*/
+    /*----------------------Conditionals and queries----------------------*/
 
     const fetchData = () => {
 
@@ -158,6 +184,8 @@ export default function Home({ setActive, user }) {
 
                     console.log("Condition nº 4")
                     console.log("A ver el last doc", lastDoc)
+
+                    console.log("first doc", firstDoc)
                 }, (error) => {
                     console.log(error)
                 }
@@ -177,6 +205,99 @@ export default function Home({ setActive, user }) {
 
     }, [activeCategory, activeGender])
 
+
+
+/*--------------------------Previous Page----------------------------*/
+
+    const previousPage = () => {
+        let q = null
+
+        //00
+        if (activeCategory !== 'Todos' && activeGender !== 'Todos') {
+            q = query(
+                collection(db, "blogs"),
+                where("category", "==", activeCategory),
+                where("gender", "==", activeGender),
+                startAfter(firstDoc),
+                limit(5))
+
+            onSnapshot(
+                q,
+                (snapshot) => {
+                    const documents = snapshot.docs.reverse()
+                    updateDocsPrev(documents) //refactored code
+
+                    console.log("Conditional Nº 1")
+                }, (error) => {
+                    console.log(error)
+                }
+
+            )
+            //01
+        } else if (activeCategory !== 'Todos' && activeGender === 'Todos') {
+            q = query(
+                collection(db, "blogs"),
+                where("category", "==", activeCategory),
+                where("gender", "!=", activeGender),
+                startAfter(firstDoc),
+                limit(5))
+
+            onSnapshot(
+                q,
+                (snapshot) => {
+                    const documents = snapshot.docs.reverse()
+                    updateDocsPrev(documents) //refactored code
+
+                    console.log("Condition nº 2")
+                }, (error) => {
+                    console.log(error)
+                }
+
+            )
+            //10
+        } else if (activeCategory === 'Todos' && activeGender !== 'Todos') {
+            q = query(
+                collection(db, "blogs"),
+                where("category", "!=", activeCategory),
+                where("gender", "==", activeGender),
+                startAfter(firstDoc),
+                limit(5))
+
+            onSnapshot(
+                q,
+                (snapshot) => {
+                    const documents = snapshot.docs.reverse()
+                    updateDocsPrev(documents)    //refactored code
+
+                    console.log("Condition nº 3")
+                }, (error) => {
+                    console.log(error)
+                }
+
+            )
+
+        } else {
+
+            q = query(
+                collection(db, "blogs"),
+                orderBy("timestamp"),
+                startAfter(firstDoc),
+                limit(5))
+
+            onSnapshot(
+                q,
+                (snapshot) => {
+                    const documents = snapshot.docs.reverse()
+                    updateDocsPrev(documents)
+
+                    console.log("Condition nº 4")
+                    console.log("A ver el last doc", lastDoc)
+                }, (error) => {
+                    console.log(error)
+                }
+            )
+        }
+    }
 
 
 /*--------------------------Next Page----------------------------*/
@@ -305,7 +426,7 @@ export default function Home({ setActive, user }) {
                             user={user}
                             handleDelete={handleDelete}
                         />
-                        <button>Anterior</button>
+                        <button onClick={previousPage}>Anterior</button>
                         <button onClick={nextPage}>Siguiente</button>
                     </div>
                     <div className="col-md-3">
