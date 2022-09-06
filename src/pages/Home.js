@@ -6,7 +6,7 @@ import {
     getDocs,
     onSnapshot,
     orderBy,
-    query,
+    query, serverTimestamp,
     where,
 } from "firebase/firestore";
 import { db } from "../firebase";
@@ -99,11 +99,14 @@ export default function Home({ setActive, user }) {
                         list.push({ id: doc.id, ...doc.data() })
                     })
                     const uniqueTags = [...new Set(tags)]
+                    list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+
                     setTags(uniqueTags)
                     setBlogs(list)
                     setFilters(list)
                     setLoading(false)
                     setActive("home")
+
 
                     console.log("Conditional Nº 1")
                 }, (error) => {
@@ -127,6 +130,8 @@ export default function Home({ setActive, user }) {
                         list.push({ id: doc.id, ...doc.data() })
                     })
                     const uniqueTags = [...new Set(tags)]
+                    list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+
                     setTags(uniqueTags)
                     setBlogs(list)
                     setFilters(list)
@@ -155,6 +160,8 @@ export default function Home({ setActive, user }) {
                         list.push({ id: doc.id, ...doc.data() })
                     })
                     const uniqueTags = [...new Set(tags)]
+                    list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+
                     setTags(uniqueTags)
                     setBlogs(list)
                     setFilters(list)
@@ -175,7 +182,7 @@ export default function Home({ setActive, user }) {
             */
             // firebase no permite compound queries en distintos campos 
             //11
-            q = collection(db, "blogs")
+            q = query(collection(db, "blogs"), orderBy("timestamp", "desc"))
             unsub = onSnapshot(
                 q,
                 (snapshot) => {
@@ -192,7 +199,7 @@ export default function Home({ setActive, user }) {
                     setLoading(false)
                     setActive("home")
 
-                    console.log("Condition nº 16")
+                    console.log("Condition nº 4")
                 }, (error) => {
                     console.log(error)
                 }

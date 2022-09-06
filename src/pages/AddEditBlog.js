@@ -22,6 +22,15 @@ const initialState = { // initial state for our form
     trending: "no",
     category: "",
     description: "",
+    gender: "",
+    imgUrl: "",
+    type: "",
+    breed: "",
+    hair: "",
+    eyes: "",
+    idCollar: "",
+    idChip: "",
+    phone: ""
 }
 
 const categoryOption = [
@@ -216,7 +225,7 @@ export default function AddEditBlog({ user, setActive }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (category && title && trending && gender && phone && type) {
+        if (category && trending && phone && type) {
             if (!id) {
                 try {
                     await addDoc(collection(db, "blogs"), {
