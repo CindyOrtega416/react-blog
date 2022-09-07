@@ -9,7 +9,9 @@ import {
     query, serverTimestamp,
     where,
     limit,
-    startAfter
+    startAfter,
+    endBefore,
+    limitToLast
 } from "firebase/firestore";
 import { db } from "../firebase";
 import BlogSection from "../components/BlogSection";
@@ -52,53 +54,61 @@ export default function Home({ setActive, user }) {
 
 /*--------------------------Get data - snapshot----------------------*/
 
-    const updateDocs = (snapshot) => {
-        let list = []
+    const updateDocs = async (snapshot) => {
+     if(snapshot.docs.length > 0)   {
+            let list = []
 
-        snapshot.docs.forEach((doc) => {
-            list.push({ id: doc.id, ...doc.data() })
-        })
-        lastDoc = snapshot.docs[snapshot.docs.length - 1 ]
-        firstDoc = snapshot.docs[0]
+            snapshot.docs.forEach((doc) => {
+                list.push({id: doc.id, ...doc.data()})
+            })
 
-        list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+         lastDoc = await snapshot.docs[snapshot.docs.length - 1]
+         firstDoc = await snapshot.docs[0]
 
-        setBlogs(list)
-        setFilters(list)
-        setLoading(false)
-        setActive("home")
-        setLastDoc(lastDoc)
-        setFirstDoc(firstDoc)
+//TODO: cuando filtro por categoria o genero no se ordena por tiempo - arreglar
+
+            list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+
+            setBlogs(list)
+            setFilters(list)
+            setLoading(false)
+            setActive("home")
+            setLastDoc(lastDoc)
+            setFirstDoc(firstDoc)
 
 
+        }
     }
 
-/*--------------------------Get data - snapshot - prev page-------------*/
+/*--------------------------Get data - snapshot - prev page------------------*/
 
-    const updateDocsPrev = (snapshot) => {  //snapshot no tiene .docs acá
+    const updateDocsPrev = async (snapshot) => {  //snapshot no tiene .docs acá
                             // porque al .docs se lo paso tmb como parametro
                             // en el boton prev más abajo (para
                             // poder hacer snapshot.docs.reverse)
-        let list = []
-        snapshot.forEach((doc) => {
-            list.push({ id: doc.id, ...doc.data() })
-        })
-        lastDoc = snapshot[snapshot.length - 1 ]
-        firstDoc = snapshot[0]
+       if(snapshot.length > 1) {
+            let list = []
+            snapshot.forEach((doc) => {
+                list.push({id: doc.id, ...doc.data()})
 
-        list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+            })
 
-        setBlogs(list)
-        setFilters(list)
-        setLoading(false)
-        setActive("home")
-        setLastDoc(lastDoc)
-        setFirstDoc(firstDoc)
+           lastDoc = await snapshot[snapshot.length - 1]
+           firstDoc = await snapshot[0]
 
-        console.log("first doc", firstDoc)
+            list.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
 
+            setBlogs(list)
+            setFilters(list)
+            setLoading(false)
+            setActive("home")
+            setLastDoc(lastDoc)
+            setFirstDoc(firstDoc)
+
+            console.log("first doc", firstDoc)
+
+        }
     }
-
 
     /*----------------------Conditionals and queries----------------------*/
 
@@ -116,9 +126,9 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
+                async (snapshot) => {
 
-                    updateDocs(snapshot) //refactored code
+                    await updateDocs(snapshot) //refactored code
 
                     console.log("Conditional Nº 1")
                 }, (error) => {
@@ -136,8 +146,8 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot) //refactored code
+                async (snapshot) => {
+                    await updateDocs(snapshot) //refactored code
 
                     console.log("Condition nº 2")
                 }, (error) => {
@@ -155,8 +165,8 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot)    //refactored code
+                async (snapshot) => {
+                    await updateDocs(snapshot)    //refactored code
 
                     console.log("Condition nº 3")
                 }, (error) => {
@@ -179,8 +189,8 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot)
+                async (snapshot) => {
+                    await updateDocs(snapshot)
 
                     console.log("Condition nº 4")
                     console.log("A ver el last doc", lastDoc)
@@ -206,7 +216,6 @@ export default function Home({ setActive, user }) {
     }, [activeCategory, activeGender])
 
 
-
 /*--------------------------Previous Page----------------------------*/
 
     const previousPage = () => {
@@ -218,16 +227,17 @@ export default function Home({ setActive, user }) {
                 collection(db, "blogs"),
                 where("category", "==", activeCategory),
                 where("gender", "==", activeGender),
-                startAfter(firstDoc),
+                endBefore(firstDoc),
                 limit(5))
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    const documents = snapshot.docs.reverse()
-                    updateDocsPrev(documents) //refactored code
+                async (snapshot) => {
+                   // const documents = snapshot.docs.reverse()
+                    //await updateDocsPrev(documents)
+                    await updateDocs(snapshot)
 
-                    console.log("Conditional Nº 1")
+                    console.log("Conditional Nº 1 - prev")
                 }, (error) => {
                     console.log(error)
                 }
@@ -235,41 +245,45 @@ export default function Home({ setActive, user }) {
             )
             //01
         } else if (activeCategory !== 'Todos' && activeGender === 'Todos') {
-            q = query(
-                collection(db, "blogs"),
-                where("category", "==", activeCategory),
-                where("gender", "!=", activeGender),
-                startAfter(firstDoc),
-                limit(5))
 
-            onSnapshot(
-                q,
-                (snapshot) => {
-                    const documents = snapshot.docs.reverse()
-                    updateDocsPrev(documents) //refactored code
+                q = query(
+                    collection(db, "blogs"),
+                    where("category", "==", activeCategory),
+                    where("gender", "!=", activeGender),
+                    endBefore(firstDoc),
+                    limit(5))
 
-                    console.log("Condition nº 2")
-                }, (error) => {
-                    console.log(error)
-                }
+                onSnapshot(
+                    q,
+                    async (snapshot) => {
+                        //const documents = snapshot.docs.reverse()
+                        //await updateDocsPrev(documents)
+                        await updateDocs(snapshot)
 
-            )
+                        console.log("Condition nº 2 - prev")
+                        console.log("nº 2 first doc", firstDoc)
+                    }, (error) => {
+                        console.log(error)
+                    }
+                )
+
             //10
         } else if (activeCategory === 'Todos' && activeGender !== 'Todos') {
             q = query(
                 collection(db, "blogs"),
                 where("category", "!=", activeCategory),
                 where("gender", "==", activeGender),
-                startAfter(firstDoc),
+                endBefore(firstDoc),
                 limit(5))
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    const documents = snapshot.docs.reverse()
-                    updateDocsPrev(documents)    //refactored code
+                async (snapshot) => {
+                   // const documents = snapshot.docs.reverse()
+                    //await updateDocsPrev(documents)
+                    await updateDocs(snapshot)
 
-                    console.log("Condition nº 3")
+                    console.log("Condition nº 3 - prev")
                 }, (error) => {
                     console.log(error)
                 }
@@ -286,11 +300,11 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
+                async (snapshot) => {
                     const documents = snapshot.docs.reverse()
-                    updateDocsPrev(documents)
+                    await updateDocsPrev(documents)
 
-                    console.log("Condition nº 4")
+                    console.log("Condition nº 4 - prev")
                     console.log("A ver el last doc", lastDoc)
                 }, (error) => {
                     console.log(error)
@@ -316,11 +330,11 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
+                async (snapshot) => {
 
-                    updateDocs(snapshot) //refactored code
+                   await updateDocs(snapshot) //refactored code
 
-                    console.log("Conditional Nº 1")
+                    console.log("Conditional Nº 1 - next")
                 }, (error) => {
                     console.log(error)
                 }
@@ -333,14 +347,14 @@ export default function Home({ setActive, user }) {
                 where("category", "==", activeCategory),
                 where("gender", "!=", activeGender),
                 startAfter(lastDoc),
-                limit(5))
+                limit(3))
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot) //refactored code
+                async (snapshot) => {
+                   await updateDocs(snapshot) //refactored code
 
-                    console.log("Condition nº 2")
+                    console.log("Condition nº 2 - next")
                 }, (error) => {
                     console.log(error)
                 }
@@ -357,10 +371,10 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot)    //refactored code
+                async (snapshot) => {
+                    await updateDocs(snapshot)    //refactored code
 
-                    console.log("Condition nº 3")
+                    console.log("Condition nº 3 - next")
                 }, (error) => {
                     console.log(error)
                 }
@@ -378,10 +392,10 @@ export default function Home({ setActive, user }) {
 
             onSnapshot(
                 q,
-                (snapshot) => {
-                    updateDocs(snapshot)
+                async (snapshot) => {
+                   await updateDocs(snapshot)
 
-                    console.log("Condition nº 4")
+                    console.log("Condition nº 4 - next")
                     console.log("A ver el last doc", lastDoc)
                 }, (error) => {
                     console.log(error)
@@ -411,7 +425,6 @@ export default function Home({ setActive, user }) {
     }
 
 
-    console.log("last doc 1", lastDoc)
     console.log("blogs", blogs)
 
     return (
