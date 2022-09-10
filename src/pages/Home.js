@@ -114,7 +114,27 @@ export default function Home({ setActive, user }) {
 
     const fetchData = () => {
 
-        let q = null
+      //  let q = null
+        const blogRef =  collection(db, "blogs")
+        //00
+        const allData = async () => {
+            const allQuery= query(blogRef, orderBy("timestamp", "desc"))
+
+            onSnapshot(
+                allQuery,
+                async (snapshot) => {
+                    await updateDocs(snapshot)
+
+                    console.log("Condition with all data")
+                }, (error) => {
+                    console.log(error)
+                }
+            )
+        }
+
+
+
+/*        let q = null
 
         //00
         if (activeCategory !== 'Todos' && activeGender !== 'Todos') {
@@ -177,9 +197,9 @@ export default function Home({ setActive, user }) {
 
 
         } else {
-            /* You're going to have to pick one field and query that one then filter
+            /!* You're going to have to pick one field and query that one then filter
             out the other on the client side. Compound Queries documentation is firm on this one.
-            */
+            *!/
             // firebase no permite compound queries en distintos campos
             //11
             q = query(
@@ -204,7 +224,7 @@ export default function Home({ setActive, user }) {
             //  lastDoc = documentSnapshot.docs[]
 
 
-        }
+        }*/
     }
 
 /*----------------------Rendering data-------------------------------*/
@@ -219,7 +239,7 @@ export default function Home({ setActive, user }) {
 /*--------------------------Previous Page----------------------------*/
 
     const previousPage = () => {
-        let q = null
+/*        let q = null
 
         //00
         if (activeCategory !== 'Todos' && activeGender !== 'Todos') {
@@ -310,17 +330,17 @@ export default function Home({ setActive, user }) {
                     console.log(error)
                 }
             )
-        }
+        }*/
     }
 
 
 /*--------------------------Next Page----------------------------*/
 
     const nextPage = () => {
-        let q = null
 
-        //00
-        if (activeCategory !== 'Todos' && activeGender !== 'Todos') {
+
+
+  /*      if (activeCategory !== 'Todos' && activeGender !== 'Todos') {
             q = query(
                 collection(db, "blogs"),
                 where("category", "==", activeCategory),
@@ -401,7 +421,7 @@ export default function Home({ setActive, user }) {
                     console.log(error)
                 }
             )
-        }
+        }*/
     }
 
 /*-----------------------------------------------------------------*/
