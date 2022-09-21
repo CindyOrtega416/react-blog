@@ -48,15 +48,49 @@ app.get('/api/products/:id', async (req, res) => {
 
     }
 })
+// https/firebase.adoptar.com/api/filter? activeCategory=adopcion
+app.get('api/filter', async (req, res)=> {
+/*    //try{
+        /!*let activeCategory = {}
 
-app.get('/api/products', async (req, res) => {
+        if(req.query.category) {
+            activeCategory = {category: req.query.category}
+        }*!/
+        try{
+
+
+            const response = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                title: doc.data().title
+            }))
+
+            return res.status(200).json(response)
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json()
+        }*/
+})
+
+app.get('/api/filter', async (req, res) => {
     try{
-        const query = db.collection('products')
-        const querySnapshot = await query.get()
+        //const activeCategory = req.query.category
+
+        let querySnapshot
+
+        if(req.query.category && req.query.gender === 'Todos' && req.query.type !== 'Todos' && req.query.hair !== 'Todos') {
+            const query = db.collection('blogs')
+                .where('category', 'array-contains', req.query.category)
+                .where('gender', '!=', req.query.gender)
+                .where('type', 'array-contains-any', req.query.type)
+                .where('hair', '==', req.query.hair)
+            querySnapshot = await query.get()
+        }
 
         const response = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            name: doc.data().name
+            title: doc.data().title,
+            category: doc.data().category,
+            gender: doc.data().gender
         }))
 
         return res.status(200).json(response)
