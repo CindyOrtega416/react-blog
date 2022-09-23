@@ -7,6 +7,8 @@ const spawn = require('child-process-promise').spawn    //for resizing (and usef
 */
 const admin = require('firebase-admin')
 const express = require('express')
+const {use} = require("express/lib/router");
+const {useState} = require("react");
 
 const app = express()
 admin.initializeApp({
@@ -75,25 +77,72 @@ app.get('/api/filter', async (req, res) => {
     try{
         //const activeCategory = req.query.category
 
+     //   const [response, setResponse] = useState([])
         let querySnapshot
+        let response = []
+        //if(req.query.category && req.query.gender === 'Todos' && req.query.type !== 'Todos' && req.query.hair === 'Todos') {
 
-        if(req.query.category && req.query.gender === 'Todos' && req.query.type !== 'Todos' && req.query.hair !== 'Todos') {
             const query = db.collection('blogs')
                 .where('category', 'array-contains', req.query.category)
-                .where('gender', '!=', req.query.gender)
-                .where('type', 'array-contains-any', req.query.type)
-                .where('hair', '==', req.query.hair)
+              /*  .where('gender', 'in', ['Hembra', 'Macho'])
+                .where('type', '==', req.query.type)
+                .where('hair', '!=', req.query.hair)*/
             querySnapshot = await query.get()
+        //}
+
+        querySnapshot.docs.forEach(doc => {
+            response.push({
+                id: doc.id,
+                category: doc.data().category,
+                type: doc.data().type,
+                gender: doc.data().gender,
+                title: doc.data().title
+                //data: doc.data()
+            })
+
+           /* title: doc.data().title,
+            category: doc.data().category,
+            gender: doc.data().gender,
+            type: doc.data().type,
+            hair: doc.data().hair*/
+        })
+
+        let updatedList = response
+        console.log("category", updatedList)
+
+/*-------------------Animal type ----------------------*/
+
+        if(req.query.type){
+            updatedList = updatedList.filter(
+                (item) => item.type.indexOf(req.query.type) >=0
+            )
         }
 
-        const response = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            title: doc.data().title,
-            category: doc.data().category,
-            gender: doc.data().gender
-        }))
+/*-------------------Gender ----------------------*/
 
-        return res.status(200).json(response)
+        updatedList?.filter((item) =>
+            req.query.gender ? req.query.gender : item)
+
+/*-------------------Hair Type ----------------------*/
+/*        if(req.query.hair) {
+            updatedList = updatedList.filter(
+                (item) => item.hair.indexOf(req.query.hair) >= 0
+            )
+        }*/
+        updatedList?.filter((item) =>
+        req.query.hair ? req.query.hair : item)
+
+/*-------------------Eyes Type ----------------------*/
+
+        updatedList?.filter((item) =>
+            req.query.eyes ? req.query.eyes : item)
+
+/*-------------------Has collar ----------------------*/
+
+        updatedList?.filter((item) =>
+            req.query.idCollar ? req.query.idCollar : item)
+
+        return res.status(200).json(updatedList)
     } catch(error) {
         console.log(error)
         return res.status(500).json()

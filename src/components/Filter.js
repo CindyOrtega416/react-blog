@@ -33,6 +33,56 @@ export default function Filter({
          const filteredBlogs = categoryOption
          .filter(applyCategoryFilter)
           */
+    /*
+     const [list, setList] = useState(blogs);
+
+     const handleActiveCategory = (event, value) =>
+     !value ? null : setActiveCategory(value)
+
+     const handleActiveAnimal = (event, value) =>
+     !value ? null : setActiveAnimal(value)
+
+      const handleActiveGender = (event, value) =>
+     !value ? null : setActiveGender(value)
+
+      const handleActiveHair = (event, value) =>
+     !value ? null : setActiveHair(value)
+
+       const applyFilters = () => {
+        let updatedList = blogs
+
+        if(activeCategory) {
+            updatedList = updatedList.filter(
+            (item) => item.category ===activeCategory
+            )
+        }
+       }
+
+       if(activeAnimal) {
+            updatedList = updatedList.filter(
+            (item) => item.type ===activeAnimal
+            )
+        }
+       }
+
+       if(activeGender) {
+            updatedList = updatedList.filter(
+            (item) => item.gender ===activeGender
+            )
+        }
+       }
+
+        if(activeHair) {
+            updatedList = updatedList.filter(
+            (item) => item.hair ===activeHair
+            )
+        }
+       }
+
+       render applyFilter
+
+    */
+
     useEffect(() => {
         if (activeAnimal === 'Todos'
             && activeHair === 'Todos'
