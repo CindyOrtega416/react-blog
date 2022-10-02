@@ -16,12 +16,12 @@ admin.initializeApp({
 })
 const db = admin.firestore()
 
-app.get('/hello-world', (req, res)=> {
+/*app.get('/hello-world', (req, res)=> {
     return res.status(200).json({
         message: 'Hello world'
     })
-})
-
+})*/
+/*
 app.post('/api/products', async (req, res) => {
     try{
         await db.collection('products')
@@ -34,9 +34,9 @@ app.post('/api/products', async (req, res) => {
         console.log(error)
         return res.status(500).send(error)
     }
-})
+})*/
 
-app.get('/api/products/:id', async (req, res) => {
+/*app.get('/api/products/:id', async (req, res) => {
     try {
        const doc = db.collection('products').doc(req.params.id)
        const item = await doc.get()    // doc.get trae tutti del documento
@@ -49,10 +49,10 @@ app.get('/api/products/:id', async (req, res) => {
         return  res.status(500).send(error)
 
     }
-})
+})*/
 // https/firebase.adoptar.com/api/filter? activeCategory=adopcion
-app.get('api/filter', async (req, res)=> {
-/*    //try{
+/*app.get('api/filter', async (req, res)=> {
+/!*    //try{
         /!*let activeCategory = {}
 
         if(req.query.category) {
@@ -70,19 +70,16 @@ app.get('api/filter', async (req, res)=> {
         } catch(error) {
             console.log(error)
             return res.status(500).json()
-        }*/
-})
+        }*!/
+})*/
 
-app.get('/api/filter', async (req, res) => {
+exports.filter = functions.https.onRequest(async(req, res) =>{
+//app.get('/api/filter', async (req, res) => {
     try{
-        //const activeCategory = req.query.category
-
-     //   const [response, setResponse] = useState([])
         let querySnapshot
         let response = []
-        //if(req.query.category && req.query.gender === 'Todos' && req.query.type !== 'Todos' && req.query.hair === 'Todos') {
 
-            const query = db.collection('blogs')
+           const query = db.collection('blogs')
                 .where('category', 'array-contains', req.query.category)
               /*  .where('gender', 'in', ['Hembra', 'Macho'])
                 .where('type', '==', req.query.type)
@@ -111,6 +108,9 @@ app.get('/api/filter', async (req, res) => {
         console.log("category", updatedList)
 
 /*-------------------Animal type ----------------------*/
+/*        updatedList?.filter((item) =>
+            req.query.type ? req.query.type : item)*/
+
 
         if(req.query.type){
             updatedList = updatedList.filter(
@@ -120,27 +120,42 @@ app.get('/api/filter', async (req, res) => {
 
 /*-------------------Gender ----------------------*/
 
-        updatedList?.filter((item) =>
-            req.query.gender ? req.query.gender : item)
+       if(req.query.gender){
+            updatedList = updatedList.filter(
+                (item) => item.gender.indexOf(req.query.gender) >=0
+            )
+        }
+        /*updatedList?.filter((item) =>
+            req.query.gender ? req.query.gender : item)*/
 
 /*-------------------Hair Type ----------------------*/
-/*        if(req.query.hair) {
+       if(req.query.hair) {
             updatedList = updatedList.filter(
                 (item) => item.hair.indexOf(req.query.hair) >= 0
             )
-        }*/
+        }/*
         updatedList?.filter((item) =>
-        req.query.hair ? req.query.hair : item)
+        req.query.hair ? req.query.hair : item)*/
 
 /*-------------------Eyes Type ----------------------*/
+        if(req.query.eyes) {
+            updatedList = updatedList.filter(
+                (item) => item.eyes.indexOf(req.query.eyes) >= 0
+            )
+        }
 
+        /*
         updatedList?.filter((item) =>
             req.query.eyes ? req.query.eyes : item)
-
+*/
 /*-------------------Has collar ----------------------*/
-
+ if(req.query.idCollar) {
+            updatedList = updatedList.filter(
+                (item) => item.idCollar.indexOf(req.query.idCollar) >= 0
+            )
+        }/*
         updatedList?.filter((item) =>
-            req.query.idCollar ? req.query.idCollar : item)
+            req.query.idCollar ? req.query.idCollar : item)*/
 
         return res.status(200).json(updatedList)
     } catch(error) {
@@ -148,6 +163,7 @@ app.get('/api/filter', async (req, res) => {
         return res.status(500).json()
     }
 })
+/*
 
 app.delete('/api/products/:id', async (req, res) => {
     try{
@@ -173,6 +189,7 @@ app.put('/api/products/:id', async(req, res)=> {
         return res.status(500).json()
     }
 })
+*/
 
 exports.app = functions.https.onRequest(app)
 
