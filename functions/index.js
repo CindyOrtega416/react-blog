@@ -21,6 +21,9 @@ app.get('/hello-world', (req, res)=> {
         message: 'Hello world'
     })
 })
+exports.filter = functions.https.onRequest(async (req, res) => {
+
+})
 
 app.post('/api/products', async (req, res) => {
     try{
@@ -110,6 +113,10 @@ app.get('/api/filter', async (req, res) => {
         let updatedList = response
         console.log("category", updatedList)
 
+/*------------------- Category ----------------------*/
+
+/*       updatedList?.filter((item) =>
+            req.query.category ? req.query.category : item)*/
 /*-------------------Animal type ----------------------*/
 
         if(req.query.type){
@@ -120,11 +127,16 @@ app.get('/api/filter', async (req, res) => {
 
 /*-------------------Gender ----------------------*/
 
+/*        if(req.query.gender){
+            updatedList = updatedList.filter(
+                (item) => item.gender.indexOf(req.query.gender) >=0
+            )
+        } */
         updatedList?.filter((item) =>
             req.query.gender ? req.query.gender : item)
 
 /*-------------------Hair Type ----------------------*/
-/*        if(req.query.hair) {
+      /*  if(req.query.hair) {
             updatedList = updatedList.filter(
                 (item) => item.hair.indexOf(req.query.hair) >= 0
             )
@@ -139,8 +151,10 @@ app.get('/api/filter', async (req, res) => {
 
 /*-------------------Has collar ----------------------*/
 
+
         updatedList?.filter((item) =>
             req.query.idCollar ? req.query.idCollar : item)
+
 
         return res.status(200).json(updatedList)
     } catch(error) {
