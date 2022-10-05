@@ -336,7 +336,8 @@ export default function AddEditBlog({ user, setActive }) {
                                     ))}
                                 </select>
                             </div>
-                            <div className="col-12 py-3">
+
+                            <div className="writeFormGroup">
                                 <p className="trending">¿Collar Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
@@ -345,7 +346,6 @@ export default function AddEditBlog({ user, setActive }) {
                                         value="Si"
                                         name="radioOptionCollar"
                                         checked={idCollar === "Si"}
-                                        onChange={handleIdCollar}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         Si&nbsp;
@@ -356,14 +356,14 @@ export default function AddEditBlog({ user, setActive }) {
                                         value="No"
                                         name="radioOptionCollar"
                                         checked={idCollar === "No"}
-                                        onChange={handleIdCollar}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         No
                                     </label>
                                 </div>
                             </div>
-                            <div className="col-12 py-3">
+
+                            <div className="writeFormGroup">
                                 <p className="trending">¿Chip Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
@@ -372,7 +372,6 @@ export default function AddEditBlog({ user, setActive }) {
                                         value="Si"
                                         name="radioOptionChip"
                                         checked={idChip === "Si"}
-                                        onChange={handleIdChip}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         Si&nbsp;
@@ -383,7 +382,6 @@ export default function AddEditBlog({ user, setActive }) {
                                         value="No"
                                         name="radioOptionChip"
                                         checked={idChip === "No"}
-                                        onChange={handleIdChip}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         No

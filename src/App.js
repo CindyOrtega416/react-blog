@@ -4,7 +4,7 @@ import './media-query.css';
 //import Home from "./pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
-import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
+import {Navigate, Route, Router, Routes, useNavigate} from "react-router-dom";
 import AddEditBlog from "./pages/AddEditBlog";
 import Detail from "./pages/Detail";
 import About from "./pages/About";
@@ -17,12 +17,17 @@ import { signOut } from "firebase/auth";
 import Settings from "./pages/settings/Settings";
 import TopBar from "./components/topbar/TopBar";
 import Home from "./pages/home/Home"
+import Single from "./pages/single/Single";
+import Write from "./pages/write/Write";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import SinglePost from "./components/singlePost/SinglePost";
 
 function App() {
     const [active, setActive] = useState("home")
-    const [user, setUser] = useState(null) // pass this user to addblog
+   // const [user, setUser] = useState(null) // pass this user to addblog
 
-    const navigate = useNavigate()
+  /*  const navigate = useNavigate()
 
     useEffect(()=> {
         auth.onAuthStateChanged((authUser) => {
@@ -41,11 +46,20 @@ function App() {
             navigate("/auth")
         })
     }
+*/
+    const user = false;
 
   return (
-    <div className="App">
+    <>
         <TopBar />
-        <Home />
+        <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/registrarse" element={ user ? <Home /> : <Register />} />
+            <Route path="/ingresar" element={ user ? <Home /> : <Login />} />
+            <Route path="/crear" element={ user ? <Write /> : <Register />} />
+            <Route path="/configuracion" element={ user ? <Settings /> : <Register />} />
+            <Route path="/post/:postId" element={<Single />} />
+        </Routes>
         {/*<Header
             setActive={setActive}
             acive={active}
@@ -68,7 +82,7 @@ function App() {
             <Route path="/settings" element={<Settings setActive={setActive}/>} />
             <Route path="*" element={<NotFound />} />
         </Routes>*/}
-    </div>
+    </>
   );
 }
 
