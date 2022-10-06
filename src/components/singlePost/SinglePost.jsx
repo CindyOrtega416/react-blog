@@ -1,17 +1,35 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './singlePost.css';
+import {Link, useLocation} from "react-router-dom";
+import axios from "axios";
 
 export default function SinglePost(){
+    const location = useLocation()
+    const path = location.pathname.split("/")[2]
+    const [post, setPost] = useState({})
+
+    useEffect(()=> {
+        const getPost = async ()=> {
+            const res = await axios.get("/posts/"+ path)
+            setPost(res.data)
+        }
+
+        getPost()
+    },[path])
+
     return(
         <div className="singlePost">
             <div className="singlePostWrapper">
-                <img
-                    src="https://images.freeimages.com/images/previews/7e5/puppy-1-1519401.jpg"
-                    alt=""
-                    className="singlePostImg"
-                />
+                {post.photo &&
+                    <img
+                        src={post.photo}
+                        alt=""
+                        className="singlePostImg"
+                    />
+                }
+
                 <h1 className="singlePostTitle">
-                     Lorem ipsum hola apt
+                    {post.title}
                     <div className="singlePostEdit">
                         <i className="singlePostIcon far fa-edit"></i>
                         <i className="singlePostIcon far fa-trash-alt"></i>
@@ -19,26 +37,16 @@ export default function SinglePost(){
                 </h1>
                 <div className="singlePostInfo">
                     <span className="singlePostAuthor">
-                        Author: <b>Root</b>
+                        Author:
+                        <Link className='link' to={`/?user=${post.username}`}>
+                           <b>{post.username}</b>
+                        </Link>
+
                     </span>
-                    <span className="singlePostDate">1 hour ago</span>
+                    <span className="singlePostDate">{new Date(post.createdAt).toDateString()}</span>
                 </div>
                 <p className="singlePostDescript">
-                    Lorem Ipsum is simply dummy
-                    text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy
-                    text ever since the 1500s, when an unknown printer
-                    took a galley of type and scrambled it to make a type specimen book.
-                    Lorem Ipsum is simply dummy
-                    text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy
-                    text ever since the 1500s, when an unknown printer
-                    took a galley of type and scrambled it to make a type specimen book.
-                    Lorem Ipsum is simply dummy
-                    text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy
-                    text ever since the 1500s, when an unknown printer
-                    took a galley of type and scrambled it to make a type specimen book.
+                    {post.description}
                 </p>
             </div>
         </div>

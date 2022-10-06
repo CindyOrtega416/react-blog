@@ -76,7 +76,7 @@ router.get("/:id", async(req, res)=> {
     }
 })
 
-//GET ALL POSTS
+//GET ALL POSTS WITH FILTERS
 router.get("/", async(req, res)=> {
     const username = req.query.user || "";
     const category = req.query.category || "";

@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
 const postRoute = require('./routes/posts');
+const categoryRoute = require("./routes/categories");
+const animalTypeRoute = require("./routes/animals")
 const multer = require('multer');
 
 dotenv.config();
@@ -33,6 +35,8 @@ app.post('/api/upload', upload.single('file'), (req,res)=> {
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);
+app.use('/api/category', categoryRoute);
+app.use('/api/animalType', animalTypeRoute);
 
 
 app.listen('5000', ()=> {

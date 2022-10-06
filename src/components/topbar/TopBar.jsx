@@ -19,7 +19,7 @@ export default function TopBar() {
                         <Link className="link" to='/'>ABOUT</Link>
                     </li>
                     <li className="topListItem">
-                        <Link className="link" to='/crear'>CREAR</Link>
+                        <Link className="link" to='/write'>CREAR</Link>
                     </li>
                     <li className="topListItem">
                         {user && 'SALIR'}
@@ -42,12 +42,12 @@ export default function TopBar() {
                 ): (
                     <ul className="topList">
                         <li className="topListItem">
-                            <Link className="link" to='/ingresar'>
+                            <Link className="link" to='/login'>
                                 INICIAR SESIÓN
                             </Link>
                         </li>
                         <li className="topListItem">
-                            <Link className="link" to='/registrarse'>
+                            <Link className="link" to='/register'>
                                 REGISTRARSE
                             </Link>
                         </li>
