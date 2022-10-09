@@ -3,39 +3,52 @@ import './sidebar.css';
 import axios from "axios";
 import {Link} from "react-router-dom";
 
-export default function Sidebar(){
+export default function Sidebar() {
     const [cats, setCats] = useState([])
+    const [selectedCat, setSelectedCat] = useState("")
+    const [selectedAnimal, setSelectedAnimal] = useState("")
     const [animalCat, setAnimalCat] = useState([])
+    const [collectedTags, setCollectedTags] = useState([]);
+    const [form, setForm] = useState("")
 
-
-    useEffect(()=> {
+    useEffect(() => {
         const getCats = async () => {
             const res = await axios.get("/category")
 
             setCats(res.data)
         }
-        const getAnimalCat = async() => {
+        const getAnimalCat = async () => {
             const res = await axios.get("/animalType")
             setAnimalCat(res.data)
         }
 
         // eslint-disable-next-line no-unused-expressions
         getCats(), getAnimalCat()
-    },[])
+    }, [])
 
 
-    return(
+    let tags = []
+    tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
+    const stringData = tags.map((value) => value).join('&')
+    console.log(tags)
+    console.log(stringData)
+
+    return (
         <div className="sidebar">
             <div className="sidebarItem">
                 <span className="sidebarTitle">Sobre mi</span>
-                <img src="" />
+                <img src=""/>
                 <p></p>
             </div>
             <div className="sidebarItem">
                 <span className="sidebarTitle">Categorias</span>
                 <ul className="sidebarList">
-                    {cats.map((c)=> (
-                        <Link className="link" to={`/?category=${c.name}`}>
+                    {cats.map((c) => (
+                        <Link className="link" to={`/?category=${c.name}`}
+                              onClick={() => {
+                                  setSelectedCat(c.name)
+                              }}
+                        >
                             <li className="sidebarListItem">{c.name}</li>
                         </Link>
                     ))}
@@ -45,8 +58,10 @@ export default function Sidebar(){
             <div className="sidebarItem">
                 <span className="sidebarTitle">Tipo de animal</span>
                 <ul className="sidebarList">
-                    {animalCat.map((c)=> (
-                        <Link className="link" to={`/?animalType=${c.name}`}>
+                    {animalCat.map((c) => (
+                        <Link className="link" to={`/?animalType=${c.name}`} onClick={() => {
+                            setSelectedAnimal(c.name)
+                        }}>
                             <li className="sidebarListItem">{c.name}</li>
                         </Link>
                     ))}
