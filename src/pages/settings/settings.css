@@ -1,8 +1,8 @@
-.settings{
+.settings {
     display: flex;
 }
 
-.settingsWrapper{
+.settingsWrapper {
     flex: 9;
     padding: 20px;
 }
@@ -13,13 +13,13 @@
     justify-content: space-between;
 }
 
-.settingsUpdateTitle{
+.settingsUpdateTitle {
     font-size: 30px;
     margin-bottom: 20px;
     color: lightcoral;
 }
 
-.settingsDeleteTitle{
+.settingsDeleteTitle {
     color: red;
     font-size: 12px;
     cursor: pointer;
@@ -30,45 +30,46 @@
     flex-direction: column;
 }
 
-.settingsPP{
+.settingsPP {
     display: flex;
     align-items: center;
     margin: 10px 0;
 }
 
-.settingsPP > img{
+.settingsPP > img {
     width: 70px;
     height: 70px;
     border-radius: 20px;
     object-fit: cover;
 }
 
-.settingsPPIcon{
+.settingsPPIcon {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     background-color: lightcoral;
     color: white;
     display: flex;
+    align-items: center;
     justify-content: center;
     margin-left: 10px;
     cursor: pointer;
 }
 
-.settingsForm > label{
+.settingsForm > label {
     font-size: 20px;
     margin-top: 20px;
 }
 
-.settingsForm >input{
-    color: grey;
+.settingsForm > input {
+    color: gray;
     margin: 10px 0;
     height: 30px;
     border: none;
     border-bottom: 1px solid lightgray;
 }
 
-.settingsSubmit{
+.settingsSubmit {
     width: 150px;
     align-self: center;
     border: none;

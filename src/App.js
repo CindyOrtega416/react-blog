@@ -10,7 +10,7 @@ import Detail from "./pages/Detail";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Auth from "./pages/Auth";
 import { auth } from "./firebase";
 import { signOut } from "firebase/auth";
@@ -22,6 +22,7 @@ import Write from "./pages/write/Write";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import SinglePost from "./components/singlePost/SinglePost";
+import {Context} from "./context/Context";
 
 function App() {
     const [active, setActive] = useState("home")
@@ -47,7 +48,7 @@ function App() {
         })
     }
 */
-    const user = false;
+    const { user } = useContext(Context);
 
   return (
     <>
