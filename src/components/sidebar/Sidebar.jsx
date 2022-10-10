@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
+import Button from 'react-bootstrap/Button';
 import './sidebar.css';
 import axios from "axios";
 import {Link} from "react-router-dom";
 
 export default function Sidebar() {
     const [cats, setCats] = useState([])
-    const [selectedCat, setSelectedCat] = useState("")
-    const [selectedAnimal, setSelectedAnimal] = useState("")
     const [animalCat, setAnimalCat] = useState([])
-    const [collectedTags, setCollectedTags] = useState([]);
+    const [genderCat, setGenderCat] = useState([])
     const [clicked, setClicked] = useState("")
+    const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
         const getCats = async () => {
@@ -22,21 +22,33 @@ export default function Sidebar() {
             setAnimalCat(res.data)
         }
 
+        const getGenderCat = async () => {
+            const res = await axios.get("/gender")
+            setGenderCat(res.data)
+        }
+
         // eslint-disable-next-line no-unused-expressions
-        getCats(), getAnimalCat()
+        getCats(), getAnimalCat(), getGenderCat()
     }, [])
 
 
-    const tags = []
     //tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
     //tags.push(selectedCat)
     // const stringData = tags.map((value) => value).join('&')
+
 
     let queryString = Object.keys(clicked).map((key) => {
         return key + '=' + clicked[key]
     }).join('&');
     console.log(queryString)
 
+    const handleClick = () => {
+        // 👇️ toggle
+        setIsActive(current => !current);
+
+        // 👇️ or set to true
+        // setIsActive(true);
+    };
 
     return (
         <div className="sidebar">
@@ -49,13 +61,16 @@ export default function Sidebar() {
                 <span className="sidebarTitle">Categorias</span>
                 <ul className="sidebarList">
                     {cats.map((c) => (
-                        <Link className="link" to={"/"}
-                              onClick={() => {
-                                  setClicked({...clicked, category: c.name})
-                              }}
+                        <Button
+                            variant="outline-secondary"
+                            className="sidebarListItem"
+                            onClick={() => {
+                                handleClick()
+                                setClicked({...clicked, category: c.name})
+                            }}
                         >
-                            <li className="sidebarListItem">{c.name}</li>
-                        </Link>
+                            {c.name}
+                        </Button>
                     ))}
                 </ul>
             </div>
@@ -64,11 +79,39 @@ export default function Sidebar() {
                 <span className="sidebarTitle">Tipo de animal</span>
                 <ul className="sidebarList">
                     {animalCat.map((c) => (
-                        <Link className="link" to={"/"} onClick={() => {
-                            setClicked({...clicked, animalType: c.name})
-                        }}>
-                            <li className="sidebarListItem">{c.name}</li>
-                        </Link>
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => {
+                                setClicked({...clicked, animalType: c.name})
+                            }}
+                            className="sidebarListItem">
+                            <li
+                                className="sidebarListItem"
+                            >
+                                {c.name}
+                            </li>
+                        </Button>
+
+                    ))}
+                </ul>
+            </div>
+
+            <div className="sidebarItem">
+                <span className="sidebarTitle">Género</span>
+                <ul className="sidebarList">
+                    {genderCat.map((c) => (
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => {
+                                setClicked({...clicked, gender: c.name})
+                            }}
+                            className="sidebarListItem">
+                            <li
+                                className="sidebarListItem"
+                            >
+                                {c.name}
+                            </li>
+                        </Button>
                     ))}
                 </ul>
             </div>
