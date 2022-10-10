@@ -9,7 +9,7 @@ export default function Sidebar() {
     const [selectedAnimal, setSelectedAnimal] = useState("")
     const [animalCat, setAnimalCat] = useState([])
     const [collectedTags, setCollectedTags] = useState([]);
-    const [form, setForm] = useState("")
+    const [clicked, setClicked] = useState("")
 
     useEffect(() => {
         const getCats = async () => {
@@ -27,11 +27,16 @@ export default function Sidebar() {
     }, [])
 
 
-    let tags = []
-    tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
-    const stringData = tags.map((value) => value).join('&')
-    console.log(tags)
-    console.log(stringData)
+    const tags = []
+    //tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
+    //tags.push(selectedCat)
+    // const stringData = tags.map((value) => value).join('&')
+
+    let queryString = Object.keys(clicked).map((key) => {
+        return key + '=' + clicked[key]
+    }).join('&');
+    console.log(queryString)
+
 
     return (
         <div className="sidebar">
@@ -44,9 +49,9 @@ export default function Sidebar() {
                 <span className="sidebarTitle">Categorias</span>
                 <ul className="sidebarList">
                     {cats.map((c) => (
-                        <Link className="link" to={`/?category=${c.name}`}
+                        <Link className="link" to={"/"}
                               onClick={() => {
-                                  setSelectedCat(c.name)
+                                  setClicked({...clicked, category: c.name})
                               }}
                         >
                             <li className="sidebarListItem">{c.name}</li>
@@ -59,14 +64,26 @@ export default function Sidebar() {
                 <span className="sidebarTitle">Tipo de animal</span>
                 <ul className="sidebarList">
                     {animalCat.map((c) => (
-                        <Link className="link" to={`/?animalType=${c.name}`} onClick={() => {
-                            setSelectedAnimal(c.name)
+                        <Link className="link" to={"/"} onClick={() => {
+                            setClicked({...clicked, animalType: c.name})
                         }}>
                             <li className="sidebarListItem">{c.name}</li>
                         </Link>
                     ))}
                 </ul>
             </div>
+            <button>
+                <Link className="link" to={`/?${queryString}`}>
+                    Filtrar
+                </Link>
+            </button>
+            <button>
+                <Link className="link" to={"/"} onClick={() => {
+                    setClicked([])
+                }}>
+                    Limpiar filtros
+                </Link>
+            </button>
             <div className="sidebarItem">
                 <span className="sidebarTitle">Siguenos</span>
                 <div className="sidebarSocial">
