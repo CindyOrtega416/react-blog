@@ -9,7 +9,9 @@ export default function Sidebar() {
     const [animalCat, setAnimalCat] = useState([])
     const [genderCat, setGenderCat] = useState([])
     const [clicked, setClicked] = useState("")
-    const [isActive, setIsActive] = useState(false);
+    const [isActiveCat, setIsActiveCat] = useState(false);
+    const [isActiveAn, setIsActiveAn] = useState(false);
+    const [isActiveGen, setIsActiveGen] = useState(false);
 
     useEffect(() => {
         const getCats = async () => {
@@ -42,14 +44,25 @@ export default function Sidebar() {
     }).join('&');
     console.log(queryString)
 
-    const handleClick = () => {
-        // 👇️ toggle
-        setIsActive(current => !current);
+    const handleClickCategory = () => {
 
-        // 👇️ or set to true
-        // setIsActive(true);
+        setIsActiveCat(current => !current);
+
     };
 
+    const handleClickAn = () => {
+
+        setIsActiveAn(current => !current);
+
+    };
+
+    const handleClickGen = () => {
+
+        setIsActiveGen(current => !current);
+
+    };
+
+    console.log(isActiveCat)
     return (
         <div className="sidebar">
             <div className="sidebarItem">
@@ -63,10 +76,15 @@ export default function Sidebar() {
                     {cats.map((c) => (
                         <Button
                             variant="outline-secondary"
+                            style={{
+                                backgroundColor: c.name === isActiveCat ? 'teal' : '',
+                                color: c.name === isActiveCat ? 'white' : '',
+                            }}
                             className="sidebarListItem"
                             onClick={() => {
-                                handleClick()
+                                handleClickCategory()
                                 setClicked({...clicked, category: c.name})
+                                setIsActiveCat(c.name)
                             }}
                         >
                             {c.name}
@@ -81,8 +99,14 @@ export default function Sidebar() {
                     {animalCat.map((c) => (
                         <Button
                             variant="outline-secondary"
+                            style={{
+                                backgroundColor: c.name === isActiveAn ? 'teal' : '',
+                                color: c.name === isActiveAn ? 'white' : '',
+                            }}
                             onClick={() => {
                                 setClicked({...clicked, animalType: c.name})
+                                handleClickAn()
+                                setIsActiveAn(c.name)
                             }}
                             className="sidebarListItem">
                             <li
@@ -102,8 +126,15 @@ export default function Sidebar() {
                     {genderCat.map((c) => (
                         <Button
                             variant="outline-secondary"
+                            style={{
+                                backgroundColor: c.name === isActiveGen ? 'teal' : '',
+                                color: c.name === isActiveGen ? 'white' : '',
+                            }}
                             onClick={() => {
                                 setClicked({...clicked, gender: c.name})
+                                handleClickGen()
+                                setIsActiveGen(c.name)
+
                             }}
                             className="sidebarListItem">
                             <li
@@ -123,6 +154,9 @@ export default function Sidebar() {
             <button>
                 <Link className="link" to={"/"} onClick={() => {
                     setClicked([])
+                    setIsActiveCat(false)
+                    setIsActiveAn(false)
+                    setIsActiveGen(false)
                 }}>
                     Limpiar filtros
                 </Link>
