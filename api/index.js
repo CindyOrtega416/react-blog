@@ -9,10 +9,12 @@ const categoryRoute = require("./routes/categories");
 const animalTypeRoute = require("./routes/animals")
 const genderRoute = require("./routes/gender")
 const multer = require('multer');
+const helmet = require("helmet");
+const morgan = require("morgan");
 const path = require("path");
 
 dotenv.config();
-app.use(express.json());
+
 app.use("/images", express.static(path.join(__dirname, "/images")))
 
 mongoose
@@ -22,6 +24,11 @@ mongoose
     })
     .then(console.log("Connected to MongoDB"))
     .catch((err) => console.log(err));
+
+//middleware
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

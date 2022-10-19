@@ -4,13 +4,13 @@ import axios from "axios";
 import {Context} from "../../context/Context";
 
 
- const categoryOption = [
+const categoryOption = [
     "Perdido",
     "Encontrado",
-    "Adopción"
+    "Adopcion"
 ]
 
- const type = [
+const type = [
     "Perro",
     "Gato",
     "Ave",
@@ -21,7 +21,7 @@ import {Context} from "../../context/Context";
     "Otro"
 ]
 
- const genderType = [
+const genderType = [
     "Hembra",
     "Macho",
 ]
@@ -38,7 +38,7 @@ const eyesType = [
     "Claros"
 ]
 
-export default function Write(){
+export default function Write() {
     const [category, setCategory] = useState("")
     const [animalType, setAnimalType] = useState("")
     const [gender, setGender] = useState("")
@@ -51,9 +51,9 @@ export default function Write(){
     const [description, setDescription] = useState("")
     const [file, setFile] = useState(null)
 
-    const { user } = useContext(Context)
+    const {user} = useContext(Context)
 
-    const handleSumit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newPost = {
             username: user.username,
@@ -68,38 +68,38 @@ export default function Write(){
             title,
             description,
         };
-        if(file){
+        if (file) {
             const data = new FormData()
             const filename = Date.now() + file.name;
-            data.append("name",filename);
-            data.append("file",file);
+            data.append("name", filename);
+            data.append("file", file);
             newPost.photo = filename;
-            try{
+            try {
                 await axios.post("/upload", data);
-            }catch(err) {
+            } catch (err) {
 
             }
         }
 
-        try{
-           const res = await axios.post("/posts", newPost);
-           window.location.replace("/post/"+res.data._id)
-        } catch (err){
-
+        try {
+            const res = await axios.post("/posts", newPost);
+            window.location.replace("/post/" + res.data._id)
+        } catch (err) {
+            console.log(err.response.data)
         }
 
     }
 
-    return(
+    return (
         <div className="write">
-            { file &&
+            {file &&
             <img
                 className="writeImg"
                 src={URL.createObjectURL(file)}
                 alt=""
             />
             }
-            <form className="writeForm" onSubmit={handleSumit}>
+            <form className="writeForm" onSubmit={handleSubmit}>
                 <div className="writeFormGroup">
                     <label htmlFor="fileInput">
                         <i className="writeIcon fas fa-plus"></i>
@@ -107,15 +107,15 @@ export default function Write(){
                     <input
                         type="file"
                         id="fileInput"
-                        style={{ display: 'none'}}
-                        onChange={e=>setFile(e.target.files[0])}
+                        style={{display: 'none'}}
+                        onChange={e => setFile(e.target.files[0])}
                     />
                     <input
                         type="text"
                         placeholder="Título"
                         className="writeInput"
                         autoFocus={true}
-                        onChange={e=>setTitle(e.target.value)}
+                        onChange={e => setTitle(e.target.value)}
                     />
                 </div>
                 <div className="writeFormGroup">
@@ -123,12 +123,12 @@ export default function Write(){
                         placeholder="Descripción"
                         type="text"
                         className="writeInput writeText"
-                        onChange={e=>setDescription(e.target.value)}
+                        onChange={e => setDescription(e.target.value)}
                     ></textarea>
                 </div>
 
                 <div className="writeFormGroup">
-                    <select className="writeInput" onChange={e=>setCategory(e.target.value)}>
+                    <select className="writeInput" onChange={e => setCategory(e.target.value)}>
                         <option>Categoria(*)</option>
                         {categoryOption.map((option, index) => (
                             <option value={option || ""} key={index}>
@@ -140,7 +140,7 @@ export default function Write(){
 
 
                 <div className="writeFormGroup">
-                    <select className="writeInput" onChange={e=>setAnimalType(e.target.value)}>
+                    <select className="writeInput" onChange={e => setAnimalType(e.target.value)}>
                         <option>Tipo de animal(*)</option>
                         {type.map((option, index) => (
                             <option value={option || ""} key={index}>
@@ -151,7 +151,7 @@ export default function Write(){
                 </div>
 
                 <div className="writeFormGroup">
-                    <select className="writeInput" onChange={e=>setGender(e.target.value)}>
+                    <select className="writeInput" onChange={e => setGender(e.target.value)}>
                         <option>Género</option>
                         {genderType.map((option, index) => (
                             <option value={option || ""} key={index}>
@@ -162,7 +162,7 @@ export default function Write(){
                 </div>
 
                 <div className="writeFormGroup">
-                    <select className="writeInput" onChange={e=>setHair(e.target.value)}>
+                    <select className="writeInput" onChange={e => setHair(e.target.value)}>
                         <option>Tipo de Pelo</option>
                         {hairType.map((option, index) => (
                             <option value={option || ""} key={index}>
@@ -173,7 +173,7 @@ export default function Write(){
                 </div>
 
                 <div className="writeFormGroup">
-                    <select className="writeInput" onChange={e=>setEyes(e.target.value)}>
+                    <select className="writeInput" onChange={e => setEyes(e.target.value)}>
                         <option>Color de ojos</option>
                         {eyesType.map((option, index) => (
                             <option value={option || ""} key={index}>
@@ -191,7 +191,7 @@ export default function Write(){
                             className="writeFormCheck"
                             value="Si"
                             name="radioOptionCollar"
-                            defaultChecked={idCollar === "Si"}
+                            defaultChecked={setIdCollar("Si")}
                         />
                         <label htmlFor="radioOption" className="writeFormLabel">
                             Si&nbsp;
@@ -201,7 +201,7 @@ export default function Write(){
                             className="writeFormInput"
                             value="No"
                             name="radioOptionCollar"
-                            defaultChecked={idCollar === "No"}
+                            defaultChecked={setIdCollar("No")}
                         />
                         <label htmlFor="radioOption" className="form-check-label">
                             No
@@ -217,7 +217,7 @@ export default function Write(){
                             className="writeFormCheck"
                             value="Si"
                             name="radioOptionChip"
-                            defaultChecked={idChip === "Si"}
+                            defaultChecked={setIdChip("Si")}
                         />
                         <label htmlFor="radioOption" className="writeFormLabel">
                             Si&nbsp;
@@ -227,7 +227,7 @@ export default function Write(){
                             className="writeFormInput"
                             value="No"
                             name="radioOptionChip"
-                            defaultChecked={idChip === "No"}
+                            defaultChecked={setIdChip("No")}
                         />
                         <label htmlFor="radioOption" className="writeFormLabel">
                             No
@@ -236,15 +236,15 @@ export default function Write(){
                 </div>
 
                 <div className="writeFormGroup">
-                     <input
-                         type="text"
-                         placeholder="Teléfono (*)"
-                         className="writeInput"
-                         onChange={e=>setPhone(e.target.value)}
-                     />
+                    <input
+                        type="text"
+                        placeholder="Teléfono (*)"
+                        className="writeInput"
+                        onChange={e => setPhone(e.target.value)}
+                    />
                 </div>
 
-                <button className="writeSubmit" type="submit" >Publicar</button>
+                <button className="writeSubmit" type="submit">Publicar</button>
             </form>
         </div>
     )
