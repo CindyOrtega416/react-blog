@@ -1,118 +1,300 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { IndividualFilteredCategory } from './IndividualFilteredCategory';
-import {useParams} from "react-router-dom";
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
-import {db} from "../firebase";
+import { useParams } from "react-router-dom";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
-const categoryOption = [
-    {
-        id:1,
-        name: 'Todos'
-    },
-    {
-        id:2,
-        name: 'Perdido'
-    },
-    {
-        id:3,
-        name: 'Encontrado'
-    },
-    {
-        id:4,
-        name: 'Adopción'
-    }
-]
 
-const genderOption = [
-    {
-        id: 1,
-        name: 'Todos'
-    },
-    {
-        id: 2,
-        name: 'Macho'
-    },
-    {
-        id: 3,
-        name: 'Hembra'
-    }
-]
+export default function Filter({
+    activeCategory, setActiveCategory,
+    activeGender, setActiveGender,
+    activeAnimal, setActiveAnimal,
+    activeHair, setActiveHair,
+    activeEyes, setActiveEyes,
+    activeChip, setActiveChip,
+    activeCollar, setActiveCollar,
+    blogs,
+    setFilters,
+    categoryOption,
+    genderOption,
+    animalType,
+    hairType,
+    eyesType,
+    idChip,
+    idCollar,
+}) {
 
-export default function Filter({ activeCategory, setActiveCategory, activeGender, setActiveGender, blogs, setFilters }) {
+    /*     const applyCategoryFilter = (category) => {
+             // Keep all categories if the filter is not set
+             // only keep the blogs that meet the category filter
+             return !activeCategory || activeCategory == category.name
+         }
+ 
+         const filteredBlogs = categoryOption
+         .filter(applyCategoryFilter)
+          */
+    /*
+     const [list, setList] = useState(blogs);
 
-    useEffect(()=> {
-        if(activeCategory === 'Todos' && activeGender === 'Todos'){
+     const handleActiveCategory = (event, value) =>
+     !value ? null : setActiveCategory(value)
+
+     const handleActiveAnimal = (event, value) =>
+     !value ? null : setActiveAnimal(value)
+
+      const handleActiveGender = (event, value) =>
+     !value ? null : setActiveGender(value)
+
+      const handleActiveHair = (event, value) =>
+     !value ? null : setActiveHair(value)
+
+       const applyFilters = () => {
+        let updatedList = blogs
+
+        if(activeCategory) {
+            updatedList = updatedList.filter(
+            (item) => item.category ===activeCategory
+            )
+        }
+       }
+
+       if(activeAnimal) {
+            updatedList = updatedList.filter(
+            (item) => item.type ===activeAnimal
+            )
+        }
+       }
+
+       if(activeGender) {
+            updatedList = updatedList.filter(
+            (item) => item.gender ===activeGender
+            )
+        }
+       }
+
+        if(activeHair) {
+            updatedList = updatedList.filter(
+            (item) => item.hair ===activeHair
+            )
+        }
+       }
+
+       render applyFilter
+
+    */
+
+    useEffect(() => {
+        if (activeAnimal === 'Todos'
+            && activeHair === 'Todos'
+            && activeEyes === 'Todos'
+            && activeCollar === 'No'
+        ) {
             setFilters(blogs)
             return
         }
 
-        const filterCategory = blogs?.filter((item)=>
-            activeCategory === 'Todos' ? item : item.category === activeCategory
+        const filterAnimal = blogs?.filter((item) =>
+            activeAnimal === 'Todos' ? item : item.type === activeAnimal
         )
 
-        const filterGender = filterCategory.filter((item)=>
-            activeGender === 'Todos' ? item : item.gender === activeGender
+        const filterHair = filterAnimal.filter((item) =>
+            activeHair === 'Todos' ? item : item.hair === activeHair
         )
 
+        const filterEyes = filterHair.filter((item) =>
+            activeEyes === 'Todos' ? item : item.eyes === activeEyes
+        )
 
-        setFilters(filterGender)
+        const filterCollar = filterEyes.filter((item) =>
+            activeCollar === 'No' ? item : item.idCollar === activeCollar
+        )
 
-    }, [activeCategory, activeGender, blogs, setFilters])
+        setFilters(filterCollar)
+    }, [activeAnimal, activeHair, activeEyes, activeCollar, blogs, setFilters])
 
     return (
-    
+
         <div>
             <div className="blog-heading text-start pt-3 py-2 mb-4">Filtrar</div>
-            <div>
-                {categoryOption.map(item=>(
-                    <>
-                {/*    <select className="catg-dropdown">
-                        <option>Categoría</option>
-                        <option value={item.name || ""} key={item.id}>
-                            {item.name}
-                        </option>
-                    </select>*/}
-                    <button
-                        onClick={()=>setActiveCategory(item.name)}
-                        key={item.id}
-                        className={`bg-white border-2 rounded-lg 
-                        px-4 py-2 mr-2 mb-2 ${activeCategory === item.name && ' ' +
-                    'bg-primary font-bold'}`} >
-                        {item.name}
-                    </button>
-                    </>
-                ))}
-            </div>
-            <div>
-                {genderOption.map(item=> (
-                    <button
-                        className={`bg-white border-2 rounded-lg 
-                        px-4 py-2 mr-2 mb-2 ${activeGender === item.name && ' ' +
-                        ' font-bold'}`}
-                        onClick={()=>setActiveGender(item.name)}
-                        key={item.id}>
-                        {item.name}
-                    </button>
-                ))}
-            </div>
-            {/*{blogs?.map((item)=> (
-                <div className="col-12 py-3">
-                    <select
-                        className="catg-dropdown"
-                    >
-                        <option>Category</option>
-                       { categoryOption.map((option, index) => (
-                            <option value={option || ""} key={index}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+            <div className='py-3'>
+                <div className='row'>
+                    <div className='col-6'>
+                        <h5 className="font-weight-bold">Categorias</h5>
+                        <div className='card-body d-flex justify-content-center'>
+                            <div>
+                                {categoryOption.map(item => {
 
+                                    if (item.name !== 'Todos') {
+                                        return (
+                                            <div className="form-check" >
+                                                <input
+                                                    type="radio"
+                                                    className="form-check-input"
+                                                    value={item.name}
+                                                    name="Category"
+                                                    onClick={() => setActiveCategory(item.name)}
+                                                />
+                                                {item.name}
+                                            </div>)
+
+                                    } else {
+                                        return (
+                                            <div className="form-check" >
+                                                <input
+                                                    type="radio"
+                                                    className="form-check-input"
+                                                    value={item.name}
+                                                    name="Category"
+                                                    onClick={() => setActiveCategory(item.name)}
+                                                />
+                                                {item.name}
+                                            </div>)
+                                    }
+
+
+
+
+
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='col-6'>
+                        <h5 className="font-weight-bold">Género</h5>
+                        <div className='card-body d-flex justify-content-center'>
+                            <div>
+                                {genderOption.map(item => {
+
+                                    if (item.name !== 'Todos') {
+                                        return (
+                                            <div className="form-check" >
+                                                <input
+                                                    type="radio"
+                                                    className="form-check-input"
+                                                    value={item.name}
+                                                    name="Gender"
+                                                    onClick={() => setActiveGender(item.name)}
+                                                />
+                                                {item.name}
+                                            </div>)
+
+                                    } else {
+                                        return (
+                                            <div className="form-check" >
+                                                <input
+                                                    type="radio"
+                                                    className="form-check-input"
+                                                    value={item.name}
+                                                    name="Gender"
+                                                    onClick={() => setActiveGender(item.name)}
+                                                />
+                                                {item.name}
+                                            </div>)
+                                    }
+
+
+
+
+
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='py-3'>
+                        <div className='row'>
+                            <div className='col-6'>
+                                <h5 className="font-weight-bold">Tipo de Animal</h5>
+                                <div className='card-body d-flex justify-content-center'>
+                                    <div>
+                                        {animalType.map(item => (
+                                            <div className="form-check" >
+                                                <input
+                                                    type="radio"
+                                                    className="form-check-input"
+                                                    value={item.name}
+                                                    name="TipoAnimal"
+                                                    onClick={() => setActiveAnimal(item.name)}
+                                                />
+                                                {item.name}
+
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='col-6'>
+                                <h5 className='font-weight-bold'>Tipo de pelo</h5>
+                                <div className='card-body d-flex justify-content-center'>
+                                    <div>
+                                        {hairType.map(item => (
+                                            <div className='form-check'>
+                                                <input
+                                                    type="radio"
+                                                    className='form-check-input'
+                                                    value={item.name}
+                                                    name='TipoPelo'
+                                                    onClick={() => setActiveHair(item.name)}
+                                                />
+                                                {item.name}
+                                            </div>
+                                        ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='py-3'>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h5 className="font-weight-bold">Tipo de Ojos</h5>
+                                        <div className='card-body d-flex justify-content-center'>
+                                            <div>
+                                                {eyesType.map((item) => (
+                                                    <div className='form-check'>
+                                                        <input
+                                                            type='radio'
+                                                            className='form-check-input'
+                                                            value={item.name}
+                                                            name='TipoOjos'
+                                                            onClick={() => setActiveEyes(item.name)}
+                                                        />
+                                                        {item.name}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='col-6'>
+                                        <h5 className="font-weight-bold">¿Tiene collar?</h5>
+                                        <div className='card-body d-flex justify-content-center'>
+                                            <div>
+                                                {idCollar.map((item) => (
+                                                    <div className='form-check'>
+                                                        <input
+                                                            type='radio'
+                                                            className='form-check-input'
+                                                            value={item.name}
+                                                            name='IdCollar'
+                                                            onClick={() => setActiveCollar(item.name)}
+                                                        />
+                                                        {item.name}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-
-            ))}
-            */}
+            </div>
         </div>
     );
 }
-
