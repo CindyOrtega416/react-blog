@@ -6,8 +6,10 @@ const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
 const postRoute = require('./routes/posts');
 const categoryRoute = require("./routes/categories");
-const animalTypeRoute = require("./routes/animals")
-const genderRoute = require("./routes/gender")
+const animalTypeRoute = require("./routes/animals");
+const genderRoute = require("./routes/gender");
+const conversationRoute = require("./routes/conversations");
+const messageRoute = require("./routes/messages");
 const multer = require('multer');
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -49,6 +51,8 @@ app.use('/api/posts', postRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/animalType', animalTypeRoute);
 app.use('/api/gender', genderRoute);
+app.use('/api/conversations', conversationRoute);
+app.use('/api/messages', messageRoute);
 
 
 app.listen('5000', () => {
