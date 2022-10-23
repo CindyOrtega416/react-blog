@@ -21,7 +21,7 @@ export default function Conversation({conversation, currentUser}) {
         }
         getUser()
     }, [currentUser, conversation])
-    console.log(user?.profilePic)
+    
     return (
         <div className="conversation">
             <img

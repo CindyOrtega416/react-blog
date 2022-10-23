@@ -4,15 +4,44 @@ import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import {Context} from "../../context/Context"
 import axios from "axios";
+import {io} from 'socket.io-client';
 
 export default function Messenger() {
     const [conversations, setConversations] = useState([]);
     const [currentChat, setCurrentChat] = useState([]);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const socket = useRef()
     const {user} = useContext(Context);
     const scrollRef = useRef()
 
+    // run socket just once
+    useEffect(() => {
+        socket.current = io("ws://localhost:5100");
+        socket.current.on("getMessage", (data) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now(),
+            });
+        });
+    }, []);
+
+    useEffect(() => {
+        arrivalMessage &&
+        currentChat?.members.includes(arrivalMessage.sender) &&
+        setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+    useEffect(() => {
+        socket.current.emit("addUser", user._id)
+        socket.current.on("getUsers", users => {    //on = taking from server
+            console.log(users)
+        })
+    }, [user])
+
+    // get conversation from backend (between 2 memebers)
     useEffect(() => {
         const getConversations = async () => {
             try {
@@ -25,6 +54,7 @@ export default function Messenger() {
         getConversations();
     }, [user._id]);
 
+    // get messages from specific conversation from backend
     useEffect(() => {
         const getMessages = async () => {
             try {
@@ -37,13 +67,26 @@ export default function Messenger() {
         getMessages()
     }, [currentChat])
 
+    // button send handles a submit
     const handleSubmit = async (e) => {
         e.preventDefault()
         const message = {
             sender: user._id,
             text: newMessage,
-            conversationId: currentChat._id
+            conversationId: currentChat._id,
         };
+
+        const receiverId = currentChat.members.find(
+            (member) => member !== user._id     // find the member that is not us (the id that is different from our id)
+        )
+
+        socket.current.emit("sendMessage", {    //emit because I'm sending something
+            senderId: user._id,  // user._id is our current user (the one logged in?)
+            receiverId,
+            text: newMessage,
+        })
+
+        // set messages to what was sent
         try {
             const res = await axios.post("/messages", message)
             setMessages([...messages, res.data])
@@ -52,6 +95,8 @@ export default function Messenger() {
             console.log(err)
         }
     };
+
+    //scroll on its own as new messages are added
     useEffect(() => {
         scrollRef?.current?.scrollIntoView({behavior: "smooth"})    //this scrolls down automatically as there are more messages
     }, [messages])
@@ -75,8 +120,7 @@ export default function Messenger() {
                         currentChat ? (
                             <>
                                 <div className="chatBoxTop">
-
-                                    {messages.map(m => (
+                                    {messages.map((m) => (
                                         <div ref={scrollRef}>
                                             <Message message={m} own={m.sender === user._id}/>
                                         </div>
@@ -93,7 +137,7 @@ export default function Messenger() {
                                 </div>
                             </>
                         ) : (
-                            <span className="noConversationText">Abre una conversaciòn para iniciar un caht!</span>
+                            <span className="noConversationText">Abre una conversaciòn para iniciar un chat!</span>
                         )}
                 </div>
             </div>
