@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
-import {db, storage} from "../firebase";
-import { getDownloadURL, ref, uploadBytesResumable, listAll} from "firebase/storage";
+import { db, storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytesResumable, listAll } from "firebase/storage";
 import {
     addDoc,
     collection,
@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { v4 } from 'uuid';
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const initialState = { // initial state for our form
@@ -22,6 +22,15 @@ const initialState = { // initial state for our form
     trending: "no",
     category: "",
     description: "",
+    gender: "",
+    imgUrl: "",
+    type: "",
+    breed: "",
+    hair: "",
+    eyes: "",
+    idCollar: "",
+    idChip: "",
+    phone: ""
 }
 
 const categoryOption = [
@@ -44,7 +53,6 @@ const animalType = [
 const genderType = [
     "Hembra",
     "Macho",
-    "No sé"
 ]
 
 const hairType = [
@@ -60,41 +68,41 @@ const eyesType = [
 ]
 
 export default function AddEditBlog({ user, setActive }) {
-   // let urlDownload
+    // let urlDownload
     const [form, setForm] = useState(initialState)// initial state for our form
     const [file, setFile] = useState(null)
     const [progress, setProgress] = useState(null)
-/*    const [imageUpload, setImageUpload] = useState()
-    const [imageList, setImageList] = useState([])*/
+    /*    const [imageUpload, setImageUpload] = useState()
+        const [imageList, setImageList] = useState([])*/
 
     const { id } = useParams();
 
     const navigate = useNavigate()
 
-  /*  const imageListRef = ref(storage, "images/") // to use in useEffect (listAll), because we
-    // wanna access all the files inside the images folder
-*/
-    const { title, tags, category, trending, description, type, breed, gender, hair, eyes, idCollar, idChip, phone} = form;
+    /*  const imageListRef = ref(storage, "images/") // to use in useEffect (listAll), because we
+      // wanna access all the files inside the images folder
+  */
+    const { title, tags, category, trending, description, type, breed, gender, hair, eyes, idCollar, idChip, phone } = form;
 
     // OPTION THAT DIDN'T WORK BUT IT'S GOOD ALTERNATIVE TO UPLOAD FILES
 
-   /* const uploadImage = () => {
-        if(imageUpload == null) return; // if there's no image, return and get out of this function
-
-        // start using functions provided by firebase
-        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`) // image name will be the current name of th image + a bunch of random letters created using uuid library
-        // uploadBytes takes in 1. The reference to where we wanna upload this; 2. Takes in the image that we wanna upload
-        // this will return a promise that says 'whenever you upload, when it's finished, run this function'
-        uploadBytes(imageRef, imageUpload).then((snapshot)=> { // snapshot to get the url of the image we're trying to upload
-            getDownloadURL(snapshot.ref).then((url) => { // get the download url for this specific image that we just uploaded
-                // setImageList((prev) => [...prev, url])
-                console.log("url", url)
-                toast.info("Image upload to firebase successfully");
-                setForm((prev) => ({ ...prev, imgUrl: url }))
-                console.log("form", form)
-            })
-        })
-    }*/
+    /* const uploadImage = () => {
+         if(imageUpload == null) return; // if there's no image, return and get out of this function
+ 
+         // start using functions provided by firebase
+         const imageRef = ref(storage, `images/${imageUpload.name + v4()}`) // image name will be the current name of th image + a bunch of random letters created using uuid library
+         // uploadBytes takes in 1. The reference to where we wanna upload this; 2. Takes in the image that we wanna upload
+         // this will return a promise that says 'whenever you upload, when it's finished, run this function'
+         uploadBytes(imageRef, imageUpload).then((snapshot)=> { // snapshot to get the url of the image we're trying to upload
+             getDownloadURL(snapshot.ref).then((url) => { // get the download url for this specific image that we just uploaded
+                 // setImageList((prev) => [...prev, url])
+                 console.log("url", url)
+                 toast.info("Image upload to firebase successfully");
+                 setForm((prev) => ({ ...prev, imgUrl: url }))
+                 console.log("form", form)
+             })
+         })
+     }*/
 
     //to show image
     //
@@ -167,18 +175,18 @@ export default function AddEditBlog({ user, setActive }) {
     const getBlogDetail = async () => {
         const docRef = doc(db, "blogs", id)
         const snapshot = await getDoc(docRef)
-        if(snapshot.exists()) {
+        if (snapshot.exists()) {
             setForm({ ...snapshot.data() })
         }
         setActive(null)
     }
 
     const handleChange = (event) => {
-        setForm({...form, [event.target.name]: event.target.value})
+        setForm({ ...form, [event.target.name]: event.target.value })
     }
 
     const handleTags = (tags) => {
-        setForm({ ...form, tags})
+        setForm({ ...form, tags })
     }
 
     const handleTrending = (event) => {
@@ -217,8 +225,8 @@ export default function AddEditBlog({ user, setActive }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (category && title && trending && gender && phone && type) {
-            if(!id) {
+        if (category && trending && phone && type) {
+            if (!id) {
                 try {
                     await addDoc(collection(db, "blogs"), {
                         ...form,
@@ -227,7 +235,7 @@ export default function AddEditBlog({ user, setActive }) {
                         userId: user.uid
                     })
                     toast.success("Reporte creado con éxito");
-                } catch(error) {
+                } catch (error) {
                     console.log(error)
                 }
             } else {    // if we have the id
@@ -239,7 +247,7 @@ export default function AddEditBlog({ user, setActive }) {
                         userId: user.uid
                     })
                     toast.success("Reporte actualizado con éxito");
-                } catch(error) {
+                } catch (error) {
                     console.log(error)
                 }
             }
@@ -251,7 +259,7 @@ export default function AddEditBlog({ user, setActive }) {
 
 
 
-    return(
+    return (
         <div className="container-fluid mb-4">
             <div className="container">
                 <div className="col-12">
@@ -328,16 +336,16 @@ export default function AddEditBlog({ user, setActive }) {
                                     ))}
                                 </select>
                             </div>
-                            <div className="col-12 py-3">
+
+                            <div className="writeFormGroup">
                                 <p className="trending">¿Collar Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
                                         type="radio"
                                         className="form-check-input"
-                                        value="yes"
+                                        value="Si"
                                         name="radioOptionCollar"
-                                        checked={idCollar === "yes"}
-                                        onChange={handleIdCollar}
+                                        checked={idCollar === "Si"}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         Si&nbsp;
@@ -345,26 +353,25 @@ export default function AddEditBlog({ user, setActive }) {
                                     <input
                                         type="radio"
                                         className="form-check-input"
-                                        value="no"
+                                        value="No"
                                         name="radioOptionCollar"
-                                        checked={idCollar === "no"}
-                                        onChange={handleIdCollar}
+                                        checked={idCollar === "No"}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         No
                                     </label>
                                 </div>
                             </div>
-                            <div className="col-12 py-3">
+
+                            <div className="writeFormGroup">
                                 <p className="trending">¿Chip Identificador?</p>
                                 <div className="form-check-inline mx-2">
                                     <input
                                         type="radio"
                                         className="form-check-input"
-                                        value="yes"
+                                        value="Si"
                                         name="radioOptionChip"
-                                        checked={idChip === "yes"}
-                                        onChange={handleIdChip}
+                                        checked={idChip === "Si"}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         Si&nbsp;
@@ -372,10 +379,9 @@ export default function AddEditBlog({ user, setActive }) {
                                     <input
                                         type="radio"
                                         className="form-check-input"
-                                        value="no"
+                                        value="No"
                                         name="radioOptionChip"
-                                        checked={idChip === "no"}
-                                        onChange={handleIdChip}
+                                        checked={idChip === "No"}
                                     />
                                     <label htmlFor="radioOption" className="form-check-label">
                                         No
@@ -451,29 +457,29 @@ export default function AddEditBlog({ user, setActive }) {
                                 </select>
                             </div>
                             <div className="col-12 py-3">
-                <textarea
-                    className="form-control description-box"
-                    placeholder="Descripción"
-                    value={description}
-                    name="description"
-                    onChange={handleChange}
-                />
+                                <textarea
+                                    className="form-control description-box"
+                                    placeholder="Descripción"
+                                    value={description}
+                                    name="description"
+                                    onChange={handleChange}
+                                />
                             </div>
                             <div className="mb-3">
                                 <input
                                     type="file"
                                     className="form-control"
-                                // everytime you select a file on this input we'll call this function (yhe arrow one we are creating)
-                                // which basically sets the image upload to be equal to the event.target.files
-                                // so you can access the file in this specific input. And since we can select multiple files
-                                // files will be an array, but for now we are uploading only one file so it will
-                                // be the first element in the array, so files[0]
-                                    onChange={(event)=> {
+                                    // everytime you select a file on this input we'll call this function (yhe arrow one we are creating)
+                                    // which basically sets the image upload to be equal to the event.target.files
+                                    // so you can access the file in this specific input. And since we can select multiple files
+                                    // files will be an array, but for now we are uploading only one file so it will
+                                    // be the first element in the array, so files[0]
+                                    onChange={(event) => {
                                         setFile(event.target.files[0])
                                     }}
                                 />
                             </div>
-                          {/*  {imageList.map((url) => {
+                            {/*  {imageList.map((url) => {
                                 return <img src={url}/>
                             })}*/}
                             <div className="col-12 py-3 text-center">
@@ -483,7 +489,7 @@ export default function AddEditBlog({ user, setActive }) {
                                     //onClick={uploadImage}
                                     disabled={progress !== null && progress < 100}
                                 >
-                                    { id ? "Actualizar" : "Crear"}
+                                    {id ? "Actualizar" : "Crear"}
                                 </button>
                             </div>
                         </form>

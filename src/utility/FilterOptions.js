@@ -2,19 +2,19 @@ import React from "react";
 
 export const categoryOption = [
     {
-        id:1,
+        id: 1,
         name: 'Todos'
     },
     {
-        id:2,
+        id: 2,
         name: 'Perdido'
     },
     {
-        id:3,
+        id: 3,
         name: 'Encontrado'
     },
     {
-        id:4,
+        id: 4,
         name: 'Adopción'
     }
 ]
@@ -40,9 +40,9 @@ export const animalType = [
         name: 'Todos'
     },
     {
-        id:1,
+        id: 1,
         name: 'Perro'
-    }, 
+    },
     {
         id: 2,
         name: 'Gato'
@@ -54,11 +54,11 @@ export const animalType = [
     {
         id: 4,
         name: 'Conejo'
-    }, 
+    },
     {
         id: 5,
         name: 'Roedor'
-    }, 
+    },
     {
         id: 6,
         name: 'Reptil'
@@ -72,3 +72,53 @@ export const animalType = [
         name: 'Otro'
     }
 ]
+
+export const hairType = [
+    {
+        id: 0,
+        name: 'Todos'
+    },
+    {
+        id: 1,
+        name: 'Sin Pelo'
+    },
+    {
+        id: 2,
+        name: 'Corto'
+    },
+    {
+        id: 3,
+        name: 'Medio'
+    },
+    {
+        id: 4,
+        name: 'Largo'
+    }
+]
+
+export const eyesType = [
+    {
+        id: 0,
+        name: 'Todos'
+    },
+    {
+        id: 1,
+        name: 'Claros'
+    },
+    {
+        id: 2,
+        name: 'Oscuros'
+    }
+]
+
+
+export const idCollar = [
+    {
+        id: 0,
+        name: 'Si'
+    },
+    {
+        id: 1,
+        name: 'No'
+    }
+] 
