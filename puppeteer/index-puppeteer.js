@@ -82,7 +82,7 @@ const constants = require("constants");
               console.log(quoteTag)*!/
               quotesArr.push({quote: quoteInfo.innerText})
           })
-  
+
           return quotesArr;
       })
       console.log(grabQuotes)*/
@@ -148,34 +148,27 @@ const constants = require("constants");
   */
     /*-------------------------------------*/
     // let's just call them publicationHandle
-    const publicationsHandles = await page.$$('div.animals-list-content'); // classname of parent
+    /*    const publicationsHandles = await page.$$('div.animals-list-content'); // classname of parent
 
-    // loop thru all handles
-    for (const publicationHandle of publicationsHandles) { //looping through each child
-        try {
-            // pass the single handle below
-            const title = await page.evaluate(
-                el => el.querySelectorAll("div.animal-content h5").textContent,
-                publicationHandle)
+        // loop thru all handles
+        for (const publicationHandle of publicationsHandles) { //looping through each child
+            try {
+                // pass the single handle below
+                const title = await page.evaluate(
+                    el => el.querySelectorAll("div.animal-content h5").textContent,
+                    publicationHandle)
 
-            // do whatever you want with the data
-            console.log(title)
-        } catch (err) {
-            console.log(err)
+                // do whatever you want with the data
+                console.log(title)
+            } catch (err) {
+                console.log(err)
+            }
+
         }
 
-    }
-
-    console.log(publicationsHandles)
-
+        console.log(publicationsHandles)
+    */
     /*-------------------------------------*/
 
-    /*    const h5 = await page.evaluate(() =>
-            Array.from(document
-                .querySelectorAll("div.card-body h5.card-title span.text-muted i"))
-                .map(partner => partner.innerText.trim()
-                )
-        )
-        console.log(h5)
-        // await browser.close();*/
+
 })();
