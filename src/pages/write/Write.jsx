@@ -183,7 +183,7 @@ export default function Write() {
                     </select>
                 </div>
 
-                <div className="writeFormGroup">
+                {/*  <div className="writeFormGroup">
                     <p className="writeText">¿Collar Identificador?</p>
                     <div className="form-check-inline mx-2">
                         <input
@@ -234,7 +234,7 @@ export default function Write() {
                         </label>
                     </div>
                 </div>
-
+*/}
                 <div className="writeFormGroup">
                     <input
                         type="text"

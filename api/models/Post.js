@@ -41,8 +41,11 @@ const PostSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        hiddenId: {
+            type: String,
+        },
     },
-    { timestamps:true }
+    {timestamps: true}
 );
 
 module.exports = mongoose.model("Post", PostSchema)

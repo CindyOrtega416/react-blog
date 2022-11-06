@@ -63,12 +63,12 @@ async function getData() {
             })
             let concatString = descriptString.concat('\n' + nameString + '\n' + imgString)
             //TODO: shows all strings in a single string, find a way to show single string
-            console.log(concatString)
+            //console.log(concatString)
 
             //names.data = title
             //  console.log(names.length)
             // console.log(names)
-            //  console.log(title)
+            console.log(title)
 
 //replace(/\s\s+/g, ' ')
             /*const description = {} split(/\r?\n/)

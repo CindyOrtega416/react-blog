@@ -2,173 +2,94 @@ const puppeteer = require("puppeteer");
 const cheerio = require('cheerio');
 const axios = require("axios");
 const constants = require("constants");
+const bcrypt = require("bcrypt");
 
 (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         defaultViewport: false
     })
     const page = await browser.newPage()    // new page = new tab
-    await page.goto("https://www.arcanoecordoba.es/animales?especie=perros&estado=en-adopcion", {timeout: 0});
-    // const page_url = 'https://www.arcanoecordoba.es/animales?especie=perros&estado=en-adopcion'
-    // await page.click('div.animal-list a')
+    await page.goto("http://www.patitasdeperros.com/en-adopcion")
 
-    /*  async function getData() {
-          const {data} = await axios.get(page_url)
-          const $ = cheerio.load(data)
-          const table = $('#wrapper > div > div > div.animals-list.col-12')
-        const names = [];
+    await page.click("a[id=btn-dogs]")
+    await page.click("a[id=btn-stage-anyone]")
+    await page.click("a[id=btn-sex-anyone]")
 
-          table.find('div.col-md-4.col-6.col-sm-4').each(async (i, element) => {
+    //await page.waitForTimeout(5000)
 
-              const $row = $(element);
-              const title = {}
-              title.name = $row.find('div.animal-list h5').text().trim()
-              const labels = ['Gender',
-                  'Age',
-                  'Category']
-              console.log(title)
-              names.push(title)
-              /*const description = {}
-              description.data = $row.find('div.animal-list p').text().trim()
-              console.log(description)*/
-    /*   })
-
-   }
-
-   getData()*/
-
-    /*    await page.type('#email', 'cindyortega416@gmail.com')
-        await page.type('#pass', '')
-        await page.click('button[class="_42ft _4jy0 _6lth _4jy6 _4jy1 selected _51sy"]')
-    */
-    // function that allow us to click
-    /*    await page.click('a[id="btn-dogs"]')
-        await page.click('a[id="btn-stage-anyone"]')
-        await page.click('a[id="btn-sex-anyone"]')
-    */
-    //  await page.waitForSelector('.col-xs-12.col-sm-6.col-md-3.col-lg-4')
-
-    /*    const titles = await page.evaluate(() => {
-            let title_elements = document.querySelectorAll("span.text-primary");
-            let title_array = Array.from(title_elements);
-            return title_array.map(title => title.textContent)
-        });
-        console.log(titles)*/
 
     /*-------------------------------------*/
-    /*
-    
-        const enlaces = await page.evaluate(() => {
-            const elements = document.querySelectorAll('.col-xs-12.col-sm-6.col-md-3.col-lg-4 span i')
-    
-            const links = [];
-            for (let element of elements) {
-                links.push(element)
-            }
-            return links
-        });
-        console.log(enlaces)
-    */
-
-    /*-------------------------------------*/
-    /*  const grabQuotes = await page.evaluate(() => {
-          const quotes = document.querySelectorAll('div.col-xs-12.col-sm-6.col-md-3.col-lg-4')
-          let quotesArr = []
-          console.log(quotes)
-          quotes.forEach((quoteTag) => {
-              const quoteInfo = quoteTag.querySelector('#b-animal-results > div:nth-child(1) > div > div > h5 > span > i')
-              /!*const actualQuote = quoteInfo[0]
-              console.log(quoteTag)*!/
-              quotesArr.push({quote: quoteInfo.innerText})
+    /*  await page.waitForTimeout(5000)
+      const grabQuotes = await page.evaluate(() => {
+          const data = document.querySelectorAll('.col-xs-12 col-sm-6 col-md-3 col-lg-4')
+          let dataArr = []
+          data.forEach((quoteTag) => {
+              const titleInfo = quoteTag.querySelectorAll(' span.text-primary, div.card-body i')
+              const quoteInfo = quoteTag.querySelectorAll('p.card-text')
+              dataArr.push({
+                  title: titleInfo.innerText.trim(),
+                  description: quoteInfo.innerText.trim()
+              })
           })
 
-          return quotesArr;
+          return dataArr;
       })
-      console.log(grabQuotes)*/
-
-    /*-------------------------------------*/
-    //   await page.waitForTimeout(5000)
-
-    // Intercept API response and pass mock data for Puppeteer
-    /*  await page.setRequestInterception(true);
-      page.on('request', request => {
-          if (request.url() === constants.API) {
-              request.respond({
-                  content: 'application/json',
-                  headers: {"Access-Control-Allow-Origin": "*"},
-                  body: JSON.stringify(constants.biddersMock)
-              });
-          } else {
-              request.continue();
-          }
-      });*/
-
-    /*   await page.click('div.animal-list a')
-       let titles = await page.evaluate(async () => {
-           let titlesList = document.querySelectorAll('tbody tr');
-           let titleArr = [];
-           for (let i = 0; i < titlesList.length; i++) {
-               titleArr[i] = {
-                   title: titlesList[i].innerText.trim()
-               };
-               // await page.goBack()
-           }
-           return titleArr;
-         console.log(titles)
-       })
-       /*
-
-            //await page.waitForTimeout(5000)
-            await page.click('div.animal-list a')
-
-            let titles = await page.evaluate(() => {
-                let titlesList = document.querySelectorAll('div.card-body.animal-data');
-                let titleArr = [];
-                for (let i = 0; i < titlesList.length; i++) {
-                    titleArr[i] = {
-                        title: titlesList[i].innerText.trim()
-                    };
-                }
-                return titleArr;
-
-            })
-        */
-    /*  let descrip = await page.evaluate(() => {
-          let titlesList = document.querySelectorAll('p.card-text');
-          let descripArr = [];
-          for (let i = 0; i < titlesList.length; i++) {
-              descripArr[i] = {
-                  title: titlesList[i].innerText.trim()
-              };
-          }
-          return descripArr;
-      })
-      console.log(descrip)
+      console.log(grabQuotes)
   */
     /*-------------------------------------*/
-    // let's just call them publicationHandle
-    /*    const publicationsHandles = await page.$$('div.animals-list-content'); // classname of parent
 
-        // loop thru all handles
-        for (const publicationHandle of publicationsHandles) { //looping through each child
-            try {
-                // pass the single handle below
-                const title = await page.evaluate(
-                    el => el.querySelectorAll("div.animal-content h5").textContent,
-                    publicationHandle)
 
-                // do whatever you want with the data
-                console.log(title)
-            } catch (err) {
-                console.log(err)
-            }
+    await page.waitForTimeout(5000)
 
+    // await page.click('div.animal-list a')
+
+
+    const title = await page.evaluate(async () => {
+        let titlesList = document.querySelectorAll('div.card-body span.text-primary, div.card-body i');
+        let descriptsList = document.querySelectorAll('div.card-body p.card-text');
+        let titleArray = []
+
+        const srcs = Array.from(    //get img src
+            document.querySelectorAll('div.card a img.card-img-top'))
+            .map((image) => image.getAttribute('src'))
+
+        for (let i = 0; i < titlesList.length; i++) {
+
+            titleArray.push({
+                title: titlesList[i].innerText.trim(),
+                category: "Adopcion",
+                animalType: "Perro",
+                description: descriptsList[i].innerText.trim(),
+                photo: srcs[i],
+                username: "Externo",
+            })
         }
 
-        console.log(publicationsHandles)
-    */
-    /*-------------------------------------*/
+        return titleArray
+    })
 
 
+    let hashImgs = []
+
+    for (let i = 0; i < title.length; i++) {
+
+        const hashImg = title[i].photo.toString()
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(hashImg, salt);
+        title[i].hiddenId = hashedPass
+        /*hashImgs.push({
+            hash: hashedPass,
+        })*/
+
+    }
+    console.log(title)
+
+    try {
+        const res = await axios.post("/posts/puppeteer", title[0]);
+        window.location.replace("/posts")
+    } catch (err) {
+        console.log(err)
+    }
 })();
