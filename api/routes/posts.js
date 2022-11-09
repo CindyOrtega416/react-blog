@@ -1,10 +1,15 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
 
-//CREATE POST
+//CREATE POST - BASED ON SCRAPED DATA
 router.post('/', async (req, res) => {
     const newPost = new Post(req.body);
+    const findPost = await Post.findOne({hiddenId: req.body.hiddenId})
+
     try {
+        if (findPost) {
+            return res.status(400).json('Post already scraped')
+        }
         const savedPost = await newPost.save();
         res.status(200).json(savedPost);
     } catch (err) {
@@ -12,22 +17,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-//CREATE POST BASED ON SCRAPED DATA
-router.post("/puppeteer", async (req, res) => {
-    //   const { hiddenId } = req.body
-
-    try {
-        let newPost = await Post.findOne(req.body.hiddenId)
-        if (newPost) return res.status(400).json('Post already scraped')
-
-        newPost = new Post(req.body)
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost);
-    } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
-    }
-})
 
 //UPDATE POST
 router.put('/:id', async (req, res) => {
