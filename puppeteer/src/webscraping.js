@@ -18,8 +18,8 @@ const webscraping = async pageURL => {
     await page.click("a[id=btn-sex-anyone]")
 
     await page.waitForTimeout(5000)
-
     let dataObj = {};
+    //let postToJSON = []
 
     try {
         const posts = await page.evaluate(async () => {
@@ -61,10 +61,19 @@ const webscraping = async pageURL => {
             })*/
 
         }
-        dataObj = {
-            posts
-        };
-        console.log(dataObj)
+
+        // Push al objects inside Post array into dataObj to have only objects
+        for (let i = 0; i < posts.length; i++) {
+
+            dataObj = Object.assign({}, posts, posts[i])
+            //dataObj = posts[i]
+
+            //console.log(dataObj)
+            // postToJSON.push(dataObj)
+        }
+        // console.log(dataObj)
+        //return postToJSON
+
 
     } catch (err) {
         console.log(err)
