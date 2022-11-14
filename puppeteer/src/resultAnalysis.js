@@ -1,10 +1,15 @@
+const express = require('express');
+const app = express();
 const data = require("./data");
 const mongoose = require("mongoose");
-const axios = require("axios");
 const {disconnect} = require("mongoose");
 const dotenv = require('dotenv')
+const path = require("path");
+const multer = require("multer");
+const Post = require("../models/Post");
 
 dotenv.config();
+
 mongoose
     .connect(process.env.MONGO_URL, {
         useNewUrlParser: true
@@ -12,14 +17,25 @@ mongoose
     .then(console.log("Connected to MongoDB via Puppeteer"))
     .catch((err) => console.log(err));
 
-const compareAndSaveResults = dataObj => {
+
+const compareAndSaveResults = posts => {
     try {
-
-        //    console.log(postToJSON)
         const Post = require("../models/Post")
+        let i
+        posts.forEach((value) => {
 
-        const newPost = new Post(dataObj)
-        return newPost.save().catch(err => console.log(err))
+            const newPost = new Post(value)
+            return newPost.save().catch(err => console.log(err))
+        })
+
+
+        //dataObj = Object.assign({}, posts, posts[i])
+        // console.log(dataObj)
+
+
+        /*        const newPost = new Post(dataObj)
+                return newPost.save().catch(err => console.log(err))
+                console.log(dataObj.length)*/
     } catch (err) {
         console.log(err)
     }

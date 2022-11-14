@@ -5,17 +5,17 @@ import axios from "axios";
 import {Context} from "../../context/Context";
 
 export default function SinglePost({
-    categoryOption,
-    genderType,
-    type,
-    hairType,
-    eyesType
-                                   }){
+                                       categoryOption,
+                                       genderType,
+                                       type,
+                                       hairType,
+                                       eyesType
+                                   }) {
     const location = useLocation()
     const path = location.pathname.split("/")[2]
     const [post, setPost] = useState({})
     const PF = "http://localhost:5000/images/";
-    const { user } = useContext(Context);
+    const {user} = useContext(Context);
 
     const [category, setCategory] = useState("")
     const [animalType, setAnimalType] = useState("")
@@ -29,9 +29,9 @@ export default function SinglePost({
     const [description, setDescription] = useState("")
     const [updateMode, setUpdateMode] = useState(false)
 
-    useEffect(()=> {
-        const getPost = async ()=> {
-            const res = await axios.get("/posts/"+ path)
+    useEffect(() => {
+        const getPost = async () => {
+            const res = await axios.get("/posts/" + path)
             setPost(res.data);
             setCategory(res.data.category);
             setAnimalType(res.data.animalType);
@@ -46,24 +46,24 @@ export default function SinglePost({
         }
 
         getPost()
-    },[path])
+    }, [path])
 
     const handleDelete = async () => {
-        try{
+        try {
             await axios.delete(`/posts/${post._id}`, {
-                data: { username:user.username },
+                data: {username: user.username},
             })
             window.location.replace("/")
-        }catch(err) {
+        } catch (err) {
             console.log(err)
         }
 
     }
 
     const handleUpdate = async () => {
-        try{
+        try {
             await axios.put(`/posts/${post._id}`, {
-                username:user.username,
+                username: user.username,
                 title,
                 description,
                 category,
@@ -75,45 +75,45 @@ export default function SinglePost({
                 phone
             })
             setUpdateMode(false)
-        }catch(err) {
+        } catch (err) {
             console.log(err)
         }
     }
-    return(
+    return (
         <div className="singlePost">
             <div className="singlePostWrapper">
                 {post.photo && (
                     <img
-                        src={PF + post.photo}
+                        src={post.photo.indexOf('https') ? PF + post.photo : post.photo}
                         alt=""
                         className="singlePostImg"
                     />
                 )} {
-                    updateMode ? (
-                        <input
+                updateMode ? (
+                    <input
                         type="text"
                         value={title}
                         className="singlePostTitleInput"
                         autoFocus
-                        onChange={(e)=>setTitle(e.target.value)}
+                        onChange={(e) => setTitle(e.target.value)}
                     />
-                    ) : (
-                        <h1 className="singlePostTitle">
-                            {title}
-                            { post.username === user?.username && (
-                                <div className="singlePostEdit">
-                                    <i
-                                        className="singlePostIcon far fa-edit"
-                                        onClick={()=>setUpdateMode(true)}
-                                    ></i>
-                                    <i
-                                        className="singlePostIcon far fa-trash-alt"
-                                        onClick={handleDelete}
-                                    ></i>
-                                </div>
-                            )}
-                        </h1>
-                    )}
+                ) : (
+                    <h1 className="singlePostTitle">
+                        {title}
+                        {post.username === user?.username && (
+                            <div className="singlePostEdit">
+                                <i
+                                    className="singlePostIcon far fa-edit"
+                                    onClick={() => setUpdateMode(true)}
+                                ></i>
+                                <i
+                                    className="singlePostIcon far fa-trash-alt"
+                                    onClick={handleDelete}
+                                ></i>
+                            </div>
+                        )}
+                    </h1>
+                )}
 
                 <div className="singlePostInfo">
                     <span className="singlePostAuthor">
@@ -128,34 +128,34 @@ export default function SinglePost({
 
                 {/*Description*/}
                 <>
-                {updateMode ? (
-                    <textarea
-                        className="singlePostDescriptInput"
-                        value={description}
-                        onChange={(e)=>setDescription(e.target.value)}
-                    />
-                    ):(
-                    <p className="singlePostDescript">
-                        {description}
-                    </p>
-                )}
-                 </>
+                    {updateMode ? (
+                        <textarea
+                            className="singlePostDescriptInput"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    ) : (
+                        <p className="singlePostDescript">
+                            {description}
+                        </p>
+                    )}
+                </>
                 {/*category*/}
                 <>
-                    {updateMode ?(
-                            <select
-                                className="writeInput"
-                                placeholder="Categoria(*)"
-                                value={category}
-                                onChange={(e)=>setCategory(e.target.value)}
-                            >
-                                {categoryOption.map((option, index) => (
-                                    <option value={option || ""} key={index}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
-                        ) : (
+                    {updateMode ? (
+                        <select
+                            className="writeInput"
+                            placeholder="Categoria(*)"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            {categoryOption.map((option, index) => (
+                                <option value={option || ""} key={index}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
                         <p className="singlePostDescript">
                             {category}
                         </p>
@@ -164,12 +164,12 @@ export default function SinglePost({
 
                 {/*animalType*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <select
                             className="writeInput"
                             placeholder="Tipo de animal(*)"
                             value={animalType}
-                            onChange={(e)=>setAnimalType(e.target.value)}
+                            onChange={(e) => setAnimalType(e.target.value)}
                         >
                             {type.map((option, index) => (
                                 <option value={option || ""} key={index}>
@@ -186,12 +186,12 @@ export default function SinglePost({
 
                 {/*gender*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <select
                             className="writeInput"
                             placeholder="Género"
                             value={gender}
-                            onChange={(e)=>setGender(e.target.value)}
+                            onChange={(e) => setGender(e.target.value)}
                         >
                             {genderType.map((option, index) => (
                                 <option value={option || ""} key={index}>
@@ -208,12 +208,12 @@ export default function SinglePost({
 
                 {/*hair*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <select
                             className="writeInput"
                             placeholder="Tipo de pelo"
                             value={hair}
-                            onChange={(e)=>setHair(e.target.value)}
+                            onChange={(e) => setHair(e.target.value)}
                         >
                             {hairType.map((option, index) => (
                                 <option value={option || ""} key={index}>
@@ -230,12 +230,12 @@ export default function SinglePost({
 
                 {/*eyes*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <select
                             className="writeInput"
                             placeholder="Color de ojos"
                             value={eyes}
-                            onChange={(e)=>setEyes(e.target.value)}
+                            onChange={(e) => setEyes(e.target.value)}
                         >
                             {eyesType.map((option, index) => (
                                 <option value={option || ""} key={index}>
@@ -252,7 +252,7 @@ export default function SinglePost({
 
                 {/*idCollar*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <div className="writeFormGroup">
                             <p className="writeText">¿Collar Identificador?</p>
                             <div className="form-check-inline mx-2">
@@ -262,7 +262,7 @@ export default function SinglePost({
                                     value="Si"
                                     name="radioOptionCollar"
                                     defaultChecked={idCollar === "Si"}
-                                    />
+                                />
                                 <label htmlFor="radioOption" className="writeFormLabel">
                                     Si&nbsp;
                                 </label>
@@ -272,7 +272,7 @@ export default function SinglePost({
                                     value="No"
                                     name="radioOptionCollar"
                                     defaultChecked={idCollar === "No"}
-                                   />
+                                />
                                 <label htmlFor="radioOption" className="form-check-label">
                                     No
                                 </label>
@@ -287,7 +287,7 @@ export default function SinglePost({
 
                 {/*idCollar*/}
                 <>
-                    {updateMode ?(
+                    {updateMode ? (
                         <div className="writeFormGroup">
                             <p className="writeText">¿Chip Identificador?</p>
                             <div className="form-check-inline mx-2">
@@ -297,7 +297,7 @@ export default function SinglePost({
                                     value="Si"
                                     name="radioOptionChip"
                                     defaultChecked={idChip === "Si"}
-                                     />
+                                />
                                 <label htmlFor="radioOption" className="writeFormLabel">
                                     Si&nbsp;
                                 </label>
@@ -307,7 +307,7 @@ export default function SinglePost({
                                     value="No"
                                     name="radioOptionChip"
                                     defaultChecked={idChip === "No"}
-                                    />
+                                />
                                 <label htmlFor="radioOption" className="writeFormLabel">
                                     No
                                 </label>
@@ -322,17 +322,17 @@ export default function SinglePost({
 
                 {/*Phone*/}
                 <>
-                {updateMode ? (
-                    <textarea
-                        className="singlePostDescriptInput"
-                        value={phone}
-                        onChange={(e)=>setPhone(e.target.value)}
-                    />
-                ):(
-                    <p className="singlePostDescript">
-                        {phone}
-                    </p>
-                )}
+                    {updateMode ? (
+                        <textarea
+                            className="singlePostDescriptInput"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                    ) : (
+                        <p className="singlePostDescript">
+                            {phone}
+                        </p>
+                    )}
                 </>
                 {updateMode && (
                     <button className="singlePostButton" onClick={handleUpdate}>Update</button>

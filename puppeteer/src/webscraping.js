@@ -19,10 +19,12 @@ const webscraping = async pageURL => {
 
     await page.waitForTimeout(5000)
     let dataObj = {};
+    let postArr = [];
+    let posts;
     //let postToJSON = []
 
     try {
-        const posts = await page.evaluate(async () => {
+        posts = await page.evaluate(async () => {
             let titlesList = document.querySelectorAll('div.card-body span.text-primary, div.card-body i');
             let descriptsList = document.querySelectorAll('div.card-body p.card-text');
             let postsArray = []
@@ -62,25 +64,20 @@ const webscraping = async pageURL => {
 
         }
 
+
         // Push al objects inside Post array into dataObj to have only objects
-        for (let i = 0; i < posts.length; i++) {
+        /*   for (let i = 0; i < posts.length + 1; i++) {
 
-            dataObj = Object.assign({}, posts, posts[i])
-            //dataObj = posts[i]
-
-            //console.log(dataObj)
-            // postToJSON.push(dataObj)
-        }
-        // console.log(dataObj)
-        //return postToJSON
-
+               dataObj = Object.assign({}, posts, posts[i])
+               // console.log(dataObj)
+           }*/
 
     } catch (err) {
         console.log(err)
     }
-
+    console.log(posts)
     await browser.close();
-    return dataObj;
+    return posts;
 }
 
 module.exports = webscraping;

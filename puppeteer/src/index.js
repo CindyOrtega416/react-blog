@@ -5,7 +5,7 @@ const webscraping = require("./webscraping");
 const compareAndSaveResults = require("./resultAnalysis");
 
 webscraping(pageURL)
-    .then(dataObj => {
-        compareAndSaveResults(dataObj);
+    .then(posts => {
+        compareAndSaveResults(posts);
     })
     .catch(console.error);
