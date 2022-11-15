@@ -1,10 +1,12 @@
 const puppeteer = require("puppeteer");
 const md5 = require('md5')
+const {waitFor} = require("@testing-library/react");
+
 
 const webscraping = async pageURL => {
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         defaultViewport: false
     })
     const page = await browser.newPage()    // new page = new tab
@@ -20,39 +22,53 @@ const webscraping = async pageURL => {
     let posts;
 
     try {
-        posts = await page.evaluate(async () => {
-            let titlesList = document.querySelectorAll('div.card-body span.text-primary, div.card-body i');
-            let descriptsList = document.querySelectorAll('div.card-body p.card-text');
-            let postsArray = []
-
-            const srcs = Array.from(    //get img src
-                document.querySelectorAll('div.card a img.card-img-top'))
-                .map((image) => image.getAttribute('src'))
-
-            for (let i = 0; i < titlesList.length; i++) {
-
-                postsArray.push({
-                    title: titlesList[i].innerText.trim(),
-                    category: "Adopcion",
-                    animalType: "Perro",
-                    description: descriptsList[i].innerText.trim(),
-                    photo: srcs[i],
-                    username: "Anonimo",
-                })
-            }
-
-            return postsArray
-        })
-
-
-        for (let i = 0; i < posts.length; i++) {
-
-            const hashImg = posts[i].photo.toString()
-
-            const strHash = md5(hashImg)
-            posts[i].hiddenId = strHash
-
+        function delay(time) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, time)
+            });
         }
+
+        posts = await page.evaluate(async () => {
+                let titlesList = document.querySelectorAll('div.card-body span.text-primary, div.card-body i');
+                let descriptsList = document.querySelectorAll('div.card-body p.card-text');
+                let modalList = document.querySelectorAll('#animal-modal-body-modal > p')
+                let postsArray = []
+
+                const srcs = Array.from(    //get img src
+                    document.querySelectorAll('div.card a img.card-img-top'))
+                    .map((image) => image.getAttribute('src'))
+
+                await document.querySelector('#b-animal-results > div:nth-child(3) > div > div > a').click()
+                await new Promise(function (resolve) {
+                    setTimeout(resolve, 3000)
+                });
+                postsArray.push(modalList.innerText)
+                //await document.querySelector('#animal-modal > div.modal-dialog > div > div.modal-footer > button').click()
+
+                for (let i = 0; i < titlesList.length; i++) {
+                    /*postsArray.push({
+                        title: titlesList[i].innerText.trim(),
+                        category: "Adopcion",
+                        animalType: "Perro",
+                        description: descriptsList[i].innerText.trim(),
+                        photo: srcs[i],
+                        username: "Anonimo",
+                    })*/
+                }
+                return postsArray
+                console.log(postsArray)
+            }
+        )
+
+        /*
+                for (let i = 0; i < posts.length; i++) {
+
+                    const hashImg = posts[i].photo.toString()
+
+                    const strHash = md5(hashImg)
+                    posts[i].hiddenId = strHash
+
+                }*/
         //console.log(posts)
 
         // Push al objects inside Post array into dataObj to have only objects
@@ -62,11 +78,12 @@ const webscraping = async pageURL => {
                // console.log(dataObj)
            }*/
 
-    } catch (err) {
+    } catch
+        (err) {
         console.log(err)
     }
     console.log(posts)
-    await browser.close();
+    //await browser.close();
     return posts;
 }
 
