@@ -1,8 +1,5 @@
 const puppeteer = require("puppeteer");
-const cheerio = require('cheerio');
-const axios = require("axios");
-const constants = require("constants");
-const bcrypt = require("bcrypt");
+const md5 = require('md5')
 
 const webscraping = async pageURL => {
 
@@ -21,7 +18,6 @@ const webscraping = async pageURL => {
     let dataObj = {};
     let postArr = [];
     let posts;
-    //let postToJSON = []
 
     try {
         posts = await page.evaluate(async () => {
@@ -49,21 +45,15 @@ const webscraping = async pageURL => {
         })
 
 
-        let hashImgs = []
-
         for (let i = 0; i < posts.length; i++) {
 
             const hashImg = posts[i].photo.toString()
 
-            const salt = await bcrypt.genSalt(10);
-            const hashedPass = await bcrypt.hash(hashImg, salt);
-            posts[i].hiddenId = hashedPass
-            /*hashImgs.push({
-                hash: hashedPass,
-            })*/
+            const strHash = md5(hashImg)
+            posts[i].hiddenId = strHash
 
         }
-
+        //console.log(posts)
 
         // Push al objects inside Post array into dataObj to have only objects
         /*   for (let i = 0; i < posts.length + 1; i++) {
@@ -81,7 +71,6 @@ const webscraping = async pageURL => {
 }
 
 module.exports = webscraping;
-//await page.waitForTimeout(5000)
 
 
 /*-------------------------------------*/
@@ -102,15 +91,3 @@ module.exports = webscraping;
   })
   console.log(grabQuotes)
 */
-/*-------------------------------------*/
-
-
-// await page.click('div.animal-list a')
-
-
-/*    try {
-        const res = await axios.post("/posts/puppeteer", title[0]);
-        window.location.replace("/posts")
-    } catch (err) {
-        console.log(err)
-    }*/

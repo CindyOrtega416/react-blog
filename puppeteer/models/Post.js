@@ -42,6 +42,7 @@ const PostSchema = new mongoose.Schema({
         },
         hiddenId: {
             type: String,
+            unique: true,
         },
     },
     {timestamps: true}
