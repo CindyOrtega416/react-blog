@@ -53,7 +53,7 @@ const webscraping = async pageURL => {
             for (let i = 0; i < generalData.length; i++) {
                 let dynamicXhrPayload = xhrPayload.data['animals']['data'][i]
                 // they all share a same xhr path (dynamicXhrPayload and then some specific code
-                img[i] = Object.values(dynamicXhrPayload['images'])[1]
+                img[i] = Object.values(dynamicXhrPayload['images'])[0]
                 hash[i] = Object.values(dynamicXhrPayload['hash']).toString().replace(/,/g, '')
                 fullname[i] = Object.values(dynamicXhrPayload['fullname']).toString().replace(/,/g, '')
                 email[i] = Object.values(dynamicXhrPayload['email']).toString().replace(/,/g, '')
