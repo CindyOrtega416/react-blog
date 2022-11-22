@@ -1,4 +1,4 @@
-const data = require("./data");
+const data = require("./utils/data");
 const {pageURL} = data;
 
 const webscraping = require("./webscraping");
