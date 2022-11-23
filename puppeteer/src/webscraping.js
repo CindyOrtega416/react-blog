@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 const pageXHRPerros = 'https://www.mediakitt.net/api/animal/all?case_status[]=2&status[]=1&species=1&sex=&adult=&page=1&limit=9'
 const pageXHRGatos = 'https://www.mediakitt.net/api/animal/all?case_status[]=2&status[]=1&species=2&sex=&adult=&page=1&limit=9'
 
-let postsArr = [];
+let postsArr = [];  // array that will contain all posts
 let data = [];
 let hash = [];
 let fullname = [];
@@ -144,7 +144,7 @@ const webscraping = async pageURL => {
                     sterilized: sterilized[i],
                     city_name: city_name[i]
                 })
-                // console.log(postsArr)
+                //console.log(postsArr)
 
 
             }

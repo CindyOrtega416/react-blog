@@ -17,11 +17,12 @@ mongoose
     .catch((err) => console.log(err));
 
 
-const compareAndSaveResults = postsArr => {
+const compareAndSaveResults = (postsArr) => {
     try {
         const Post = require("../models/Post")
-        //console.log(postsArr)
 
+        //console.log(postsArr)
+        //  console.log(posts2.length)
         postsArr.forEach((value) => {
             //console.log('value', value)
             if (value.hiddenId) {
@@ -39,6 +40,7 @@ const compareAndSaveResults = postsArr => {
             }
 
         })
+
 
         //dataObj = Object.assign({}, posts, posts[i])
         // console.log(dataObj)
