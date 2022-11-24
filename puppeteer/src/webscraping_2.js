@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const autoScroll = require("./utils/autoScroll");
-const md5 = require('md5')
+const md5 = require('md5');
 
 let posts2;
 let postsArr2 = [];
@@ -47,9 +47,9 @@ const webscraping_2 = async () => {
                     username: "Anonimo",
                     gender: descriptsList2[i].innerText.trim().includes('vacunada' || 'castrada' || 'desparacitada') ? "Hembra" : "Macho",
                     email: commonContactInfo[14],
-                    city_name: commonContactInfo[0],
-                    province: commonContactInfo[1] + ' ' + commonContactInfo[2],
-                    country: commonContactInfo[3],
+                    city_name: commonContactInfo[0].replace(/,/, ''),
+                    province: commonContactInfo[1] + ' ' + commonContactInfo[2].replace(/,/, ''),
+                    country: commonContactInfo[3].replace(/;/, ''),
                     phone: commonContactInfo[10] + ' ' + commonContactInfo[11] + ' ' + commonContactInfo[12],
                     photo: `https://www.adopterosargentina.com/${srcs2[i]}`,
                 })
@@ -68,7 +68,7 @@ const webscraping_2 = async () => {
 
         }
 
-        console.log(posts2)
+        //console.log(posts2)
 
         await browser.close()
         return posts2;
@@ -80,4 +80,4 @@ const webscraping_2 = async () => {
 }
 
 webscraping_2()
-//module.exports = webscraping_2;
+module.exports = webscraping_2;

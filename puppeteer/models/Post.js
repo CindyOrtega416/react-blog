@@ -44,6 +44,22 @@ const PostSchema = new mongoose.Schema({
             type: String,
             unique: true,
         },
+        city_name: {
+            type: String,
+        },
+        province: {
+            type: String,
+        },
+        country: {
+            type: String,
+        },
+        sterilized: {
+            type: String,
+        },
+        age: {
+            type: String,
+        },
+        
     },
     {timestamps: true}
 );
