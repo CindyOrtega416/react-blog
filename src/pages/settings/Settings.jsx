@@ -57,7 +57,7 @@ export default function Settings() {
                     <label>Foto de perfil</label>
                     <div className="settingsPP">
                         <img
-                            src={file ? URL.createObjectURL(file) : PF + user.profilePic}
+                            src={file ? URL.createObjectURL(file) : PF + (user.profilePic ? user.profilePic : "person/noUser.png")}
                             alt=""
                         />
                         <label htmlFor="fileInput">

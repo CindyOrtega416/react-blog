@@ -26,7 +26,7 @@ const compareAndSaveResults = (postsArr) => {
         postsArr.forEach((value) => {
             //console.log('value', value)
             if (value.hiddenId) {
-                Post.find({hiddenId: value.hiddenId}, function (err, newPost) { //buscar un hiddenId en la BD que sea = al hiddenId de la publicación que quiero postear en la BD
+                Post.find({hiddenId: value.hiddenId}, async function (err, newPost) { //buscar un hiddenId en la BD que sea = al hiddenId de la publicación que quiero postear en la BD
                     if (!err) {
                         if (newPost.length > 0) {   //Si encuentra un hiddenId con ese valor en la BD, me lo va a devolver y length > 0
                             console.log('Post already scraped')

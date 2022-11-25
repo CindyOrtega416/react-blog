@@ -4,12 +4,8 @@ const Post = require('../models/Post');
 //CREATE POST - BASED ON SCRAPED DATA
 router.post('/', async (req, res) => {
     const newPost = new Post(req.body);
-    // const findPost = await Post.findOne({hiddenId: req.body.hiddenId})
 
     try {
-        /*   if (findPost) {
-               return res.status(400).json('Post already scraped')
-           }*/
         const savedPost = await newPost.save();
         res.status(200).json(savedPost);
     } catch (err) {
@@ -92,10 +88,16 @@ router.get("/", async (req, res) => {
     const eyes = req.query.eyes || "";
     const idCollar = req.query.idCollar || "";
 
+    const PAGE_SIZE = 10;
+    const page = parseInt(req.query.page || "0");
+    const total = await Post.countDocuments({});
+
     try {
         let posts;
         if (username) {
             posts = await Post.find({username})
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page);
         } else if (category || animalType || gender || hair || eyes || idCollar) {
 
             const categoryFilter = category ? {category} : {};
@@ -113,11 +115,18 @@ router.get("/", async (req, res) => {
                 ...eyesFilter,
                 ...idCollarFilter
             })
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page);
 
         } else {
-            posts = await Post.find();
+            posts = await Post.find()
+            .limit(PAGE_SIZE)
+            .skip(PAGE_SIZE * page);
         }
-        res.status(200).json(posts);
+        res.status(200).json({
+            posts, 
+            totalPages: Math.ceil(total / PAGE_SIZE)
+        });
 
     } catch (err) {
         res.status(500).json(err);
