@@ -4,7 +4,7 @@ import Header from "../../components/header/Header";
 import Posts from "../../components/posts/Posts";
 import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 export default function Home(){
 
@@ -17,14 +17,14 @@ export default function Home(){
 
     useEffect(()=> {
         const fetchPosts = async () =>{
-            const res = await axios.get("/posts" + search)
+            const res = await axios.get(`/posts?page=${pageNumber}` + search)
             setPosts(res.data.posts)
             setNumberOfPages(res.data.totalPages);
             console.log('response', res)
         }
 
         fetchPosts();
-    }, [search])
+    }, [search, pageNumber])
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
@@ -39,8 +39,26 @@ export default function Home(){
             <Header />
             <div className="home">
                 <Posts posts={posts}/>
-                <Sidebar posts={posts}/>
+                <Sidebar 
+                posts={posts}
+                pageNumber={pageNumber}
+                setPageNumber={setPageNumber}
+                numberOfPages={numberOfPages}
+                setNumberOfPages={setNumberOfPages}
+                />
             </div>
+            
+            
+            <button onClick={gotoPrevious}>Anterior</button>
+                {pages.map((pageIndex)=> (
+                    <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
+                        <Link to={`/?page=${pageIndex + 1}`}>
+                            {pageIndex + 1}
+                        </Link>
+                    </button>
+                    
+                ))}
+                <button onClick={gotoNext}>Siguiente</button>
         </>
 
     )

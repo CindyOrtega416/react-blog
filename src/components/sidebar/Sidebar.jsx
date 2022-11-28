@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import Button from 'react-bootstrap/Button';
 import './sidebar.css';
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {useLocation, Link} from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNumberOfPages}) {
     const [cats, setCats] = useState([])
     const [animalCat, setAnimalCat] = useState([])
     const [genderCat, setGenderCat] = useState([])
@@ -13,11 +13,13 @@ export default function Sidebar() {
     const [isActiveAn, setIsActiveAn] = useState(false);
     const [isActiveGen, setIsActiveGen] = useState(false);
 
+    const {search} = useLocation();
+
     useEffect(() => {
         const getCats = async () => {
             const res = await axios.get("/category")
-
             setCats(res.data)
+            console.log(res)
         }
         const getAnimalCat = async () => {
             const res = await axios.get("/animalType")
@@ -147,12 +149,12 @@ export default function Sidebar() {
                 </ul>
             </div>
             <button>
-                <Link className="link" to={`/?${queryString}`}>
+                <Link className="link" to={`/?page=${pageNumber}&${queryString}`}>
                     Filtrar
                 </Link>
             </button>
             <button>
-                <Link className="link" to={"/"} onClick={() => {
+                <Link className="link" to={`/?page=${pageNumber}`} onClick={() => {
                     setClicked([])
                     setIsActiveCat(false)
                     setIsActiveAn(false)
