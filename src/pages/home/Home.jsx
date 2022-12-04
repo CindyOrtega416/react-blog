@@ -6,7 +6,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
 import {Link, useLocation} from "react-router-dom";
 
-export default function Home(){
+export default function Home() {
 
     const [posts, setPosts] = useState([])
     const [pageNumber, setPageNumber] = useState(0);
@@ -15,8 +15,8 @@ export default function Home(){
 
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
 
-    useEffect(()=> {
-        const fetchPosts = async () =>{
+    useEffect(() => {
+        const fetchPosts = async () => {
             const res = await axios.get(`/posts?page=${pageNumber}` + search)
             setPosts(res.data.posts)
             setNumberOfPages(res.data.totalPages);
@@ -28,37 +28,49 @@ export default function Home(){
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
-      };
-    
-      const gotoNext = () => {
-        setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
-      };
+        return (
+            <>
+                <Link to={`/?page=${pageNumber}` + search}></Link>
+            </>
+        )
+    };
 
-    return(
+    const gotoNext = () => {
+        setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
+        return (
+            <>
+                <Link to={`/?page=${pageNumber}` + search}></Link>
+            </>
+        )
+    };
+
+    return (
         <>
-            <Header />
+            <Header/>
             <div className="home">
                 <Posts posts={posts}/>
-                <Sidebar 
-                posts={posts}
-                pageNumber={pageNumber}
-                setPageNumber={setPageNumber}
-                numberOfPages={numberOfPages}
-                setNumberOfPages={setNumberOfPages}
+                <Sidebar
+                    posts={posts}
+                    pageNumber={pageNumber}
+                    setPageNumber={setPageNumber}
+                    numberOfPages={numberOfPages}
+                    setNumberOfPages={setNumberOfPages}
                 />
             </div>
-            
-            
-            <button onClick={gotoPrevious}>Anterior</button>
-                {pages.map((pageIndex)=> (
-                    <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
-                        <Link to={`/?page=${pageIndex + 1}`}>
-                            {pageIndex + 1}
-                        </Link>
-                    </button>
-                    
-                ))}
-                <button onClick={gotoNext}>Siguiente</button>
+
+
+            <button onClick={gotoPrevious}>
+                Anterior
+            </button>
+            {pages.map((pageIndex) => (
+                <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
+                    <Link to={`/?page=${pageIndex + 1}`}>
+                        {pageIndex + 1}
+                    </Link>
+                </button>
+
+            ))}
+            <button onClick={gotoNext}>Siguiente</button>
         </>
 
     )

@@ -90,14 +90,16 @@ router.get("/", async (req, res) => {
 
     const PAGE_SIZE = 10;
     const page = parseInt(req.query.page || "0");
-    const total = await Post.countDocuments({});
 
     try {
         let posts;
+        let total;
         if (username) {
             posts = await Post.find({username})
-            .limit(PAGE_SIZE)
-            .skip(PAGE_SIZE * page);
+                .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);
+            //How many pages we have based on how many documents passed the filter
+            total = await Post.countDocuments({username});
         } else if (category || animalType || gender || hair || eyes || idCollar) {
 
             const categoryFilter = category ? {category} : {};
@@ -115,16 +117,26 @@ router.get("/", async (req, res) => {
                 ...eyesFilter,
                 ...idCollarFilter
             })
-            .limit(PAGE_SIZE)
-            .skip(PAGE_SIZE * page);
+                .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);
+            total = await Post.countDocuments({
+                ...categoryFilter,
+                ...animalTypeFilter,
+                ...genderFilter,
+                ...hairFilter,
+                ...eyesFilter,
+                ...idCollarFilter
+            });
 
         } else {
             posts = await Post.find()
-            .limit(PAGE_SIZE)
-            .skip(PAGE_SIZE * page);
+                .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);
+            total = await Post.countDocuments({})
         }
+
         res.status(200).json({
-            posts, 
+            posts,
             totalPages: Math.ceil(total / PAGE_SIZE)
         });
 
