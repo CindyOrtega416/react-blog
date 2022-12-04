@@ -89,7 +89,7 @@ router.get("/", async (req, res) => {
     const idCollar = req.query.idCollar || "";
 
     const PAGE_SIZE = 10;
-    const page = parseInt(req.query.page || "0");
+    const page = parseInt(req.query.page || "1");
 
     try {
         let posts;

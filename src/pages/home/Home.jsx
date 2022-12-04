@@ -28,20 +28,13 @@ export default function Home() {
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
-        return (
-            <>
-                <Link to={`/?page=${pageNumber}` + search}></Link>
-            </>
-        )
+        console.log('pageNumber', pageNumber)
+
     };
 
     const gotoNext = () => {
         setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
-        return (
-            <>
-                <Link to={`/?page=${pageNumber}` + search}></Link>
-            </>
-        )
+        console.log('pageNumber', pageNumber)
     };
 
     return (
@@ -58,10 +51,16 @@ export default function Home() {
                 />
             </div>
 
+            {
+                numberOfPages > 1 ? (
+                    <Link to={`/?page=${pageNumber}`} onClick={gotoPrevious}>
+                        Anterior
+                    </Link>
 
-            <button onClick={gotoPrevious}>
-                Anterior
-            </button>
+                ) : (
+                    <></>
+                )
+            }
             {pages.map((pageIndex) => (
                 <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
                     <Link to={`/?page=${pageIndex + 1}`}>
@@ -70,7 +69,17 @@ export default function Home() {
                 </button>
 
             ))}
-            <button onClick={gotoNext}>Siguiente</button>
+
+            {
+                numberOfPages > 1 ? (
+                    <Link to={`/?page=${pageNumber + 2}`} onClick={gotoNext}>
+                        Siguiente
+                    </Link>
+
+                ) : (
+                    <></>
+                )
+            }
         </>
 
     )
