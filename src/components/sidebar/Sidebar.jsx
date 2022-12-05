@@ -52,13 +52,13 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
 
     };
 
-    const handleClickAn = () => {
+    const handleClickAnimal = () => {
 
         setIsActiveAn(current => !current);
 
     };
 
-    const handleClickGen = () => {
+    const handleClickGender = () => {
 
         setIsActiveGen(current => !current);
 
@@ -107,7 +107,7 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
                             }}
                             onClick={() => {
                                 setClicked({...clicked, animalType: c.name})
-                                handleClickAn()
+                                handleClickAnimal()
                                 setIsActiveAn(c.name)
                             }}
                             className="sidebarListItem">
@@ -134,7 +134,7 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
                             }}
                             onClick={() => {
                                 setClicked({...clicked, gender: c.name})
-                                handleClickGen()
+                                handleClickGender()
                                 setIsActiveGen(c.name)
 
                             }}

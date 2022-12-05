@@ -4,13 +4,16 @@ import Header from "../../components/header/Header";
 import Posts from "../../components/posts/Posts";
 import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useSearchParams} from "react-router-dom";
 
 export default function Home() {
 
     const [posts, setPosts] = useState([])
+    const [data, setData] = useState([])
+    // page number is showned to start at 1 but from backend it actually starts from 0
     const [pageNumber, setPageNumber] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
     const {search} = useLocation();
 
     const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
@@ -18,9 +21,10 @@ export default function Home() {
     useEffect(() => {
         const fetchPosts = async () => {
             const res = await axios.get(`/posts?page=${pageNumber}` + search)
+            setData()
             setPosts(res.data.posts)
             setNumberOfPages(res.data.totalPages);
-            console.log('response', res)
+            console.log('response', pages)
         }
 
         fetchPosts();
@@ -28,15 +32,17 @@ export default function Home() {
 
     const gotoPrevious = () => {
         setPageNumber(Math.max(0, pageNumber - 1));
-        console.log('pageNumber', pageNumber)
+
 
     };
 
     const gotoNext = () => {
         setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
+
         console.log('pageNumber', pageNumber)
     };
-
+    console.log('pageNumber', pageNumber)
+    console.log('Number of fucking pages', numberOfPages)
     return (
         <>
             <Header/>
@@ -53,10 +59,18 @@ export default function Home() {
 
             {
                 numberOfPages > 1 ? (
-                    <Link to={`/?page=${pageNumber}`} onClick={gotoPrevious}>
-                        Anterior
-                    </Link>
-
+                    pageNumber > 0 ? (
+                        <button disabled={false}>
+                            <Link to={`/?page=${pageNumber}`}
+                                  onClick={gotoPrevious}>
+                                Anterior
+                            </Link>
+                        </button>
+                    ) : (
+                        <button disabled={true}>
+                            Anterior
+                        </button>
+                    )
                 ) : (
                     <></>
                 )
@@ -72,10 +86,19 @@ export default function Home() {
 
             {
                 numberOfPages > 1 ? (
-                    <Link to={`/?page=${pageNumber + 2}`} onClick={gotoNext}>
-                        Siguiente
-                    </Link>
-
+                    pageNumber === (numberOfPages - 1) ? (
+                        <button disabled={true}>
+                            Siguiente
+                        </button>
+                    ) : (
+                        <button disabled={false}>
+                            <Link
+                                to={`/?page=${pageNumber + 2}`}
+                                onClick={gotoNext}>
+                                Siguiente
+                            </Link>
+                        </button>
+                    )
                 ) : (
                     <></>
                 )
