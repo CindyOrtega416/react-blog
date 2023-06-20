@@ -5,15 +5,7 @@ import './media-query.css';
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import {Navigate, Route, Router, Routes, useNavigate} from "react-router-dom";
-import AddEditBlog from "./pages/AddEditBlog";
-import Detail from "./pages/Detail";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
-import Header from "./components/Header";
 import {useContext, useEffect, useState} from "react";
-import Auth from "./pages/Auth";
-import {auth} from "./firebase";
-import {signOut} from "firebase/auth";
 import Settings from "./pages/settings/Settings";
 import TopBar from "./components/topbar/TopBar";
 import Home from "./pages/home/Home"
@@ -22,6 +14,7 @@ import Write from "./pages/write/Write";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import SinglePost from "./components/singlePost/SinglePost";
+import ChatBox from "./components/Messenger/ChatBox/ChatBox";
 import {Context} from "./context/Context";
 import Messenger from "./pages/messanger/Messenger";
 
@@ -61,7 +54,8 @@ function App() {
                 <Route path="/write" element={user ? <Write/> : <Register/>}/>
                 <Route path="/settings" element={user ? <Settings/> : <Register/>}/>
                 <Route path="/post/:postId" element={<Single/>}/>
-                <Route path="/messenger" element={!user ? <Home/> : <Messenger/>}/>
+                <Route path="/messenger" element={user ? <Messenger/> : <Home/>}/>
+                <Route path="/messenger/:conversationId" element={user ? <ChatBox/> : <Home/>}/>
             </Routes>
             {/*<Header
             setActive={setActive}

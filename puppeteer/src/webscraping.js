@@ -24,11 +24,12 @@ let posts;
 const webscraping = async pageURL => {
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         defaultViewport: false
     })
     const page = await browser.newPage()    // new page = new tab
     await page.goto(pageURL)
+    console.log('holaa')
 
     try {
 

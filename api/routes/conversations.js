@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 })
 
 
-//get conv of user
+//get conversations that include a certain user
 router.get("/:userId", async (req, res) => {
     try {
         const conversation = await Conversation.find({

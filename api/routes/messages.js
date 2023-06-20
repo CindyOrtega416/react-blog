@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     }
 })
 
-//get
+//get specific chat based on conversationId
 router.get("/:conversationId", async (req, res) => {
     try {
         const messages = await Message.find({

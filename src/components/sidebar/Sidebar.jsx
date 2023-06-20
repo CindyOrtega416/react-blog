@@ -1,19 +1,21 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo, useCallback} from "react";
 import Button from 'react-bootstrap/Button';
 import './sidebar.css';
 import axios from "axios";
 import {useLocation, Link} from "react-router-dom";
 
-export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNumberOfPages}) {
+export default function Sidebar({currentPage, stringify, clicked, setClicked, query, setQuery}) {
     const [cats, setCats] = useState([])
     const [animalCat, setAnimalCat] = useState([])
     const [genderCat, setGenderCat] = useState([])
-    const [clicked, setClicked] = useState("")
     const [isActiveCat, setIsActiveCat] = useState(false);
     const [isActiveAn, setIsActiveAn] = useState(false);
     const [isActiveGen, setIsActiveGen] = useState(false);
 
     const {search} = useLocation();
+    
+    console.log("El search desde location es: ", search)
+    console.log("Clicked desde sidebar: ", clicked)
 
     useEffect(() => {
         const getCats = async () => {
@@ -33,7 +35,7 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
 
         // eslint-disable-next-line no-unused-expressions
         getCats(), getAnimalCat(), getGenderCat()
-    }, [])
+    }, [setCats, setAnimalCat, setGenderCat])
 
 
     //tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
@@ -41,12 +43,8 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
     // const stringData = tags.map((value) => value).join('&')
 
 
-    let queryString = Object.keys(clicked).map((key) => {
-        return key + '=' + clicked[key]
-    }).join('&');
-    console.log(queryString)
 
-    const handleClickCategory = () => {
+    const handleClickCategory = () => { 
 
         setIsActiveCat(current => !current);
 
@@ -64,7 +62,8 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
 
     };
 
-    console.log(isActiveCat)
+
+
     return (
         <div className="sidebar">
             <div className="sidebarItem">
@@ -149,12 +148,12 @@ export default function Sidebar({pageNumber, setPageNumber, numberOfPages, setNu
                 </ul>
             </div>
             <button>
-                <Link className="link" to={`/?page=${pageNumber}&${queryString}`}>
+                <Link className="link" to={`/?page=1&${stringify}`}>
                     Filtrar
                 </Link>
             </button>
             <button>
-                <Link className="link" to={`/?page=${pageNumber}`} onClick={() => {
+                <Link className="link" to={`/?page=1`} onClick={() => {
                     setClicked([])
                     setIsActiveCat(false)
                     setIsActiveAn(false)

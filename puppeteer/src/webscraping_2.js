@@ -2,6 +2,9 @@ const puppeteer = require("puppeteer");
 const autoScroll = require("./utils/autoScroll");
 const md5 = require('md5');
 
+// To keep in mind: 
+// What to do if website is no longer  available?
+
 let posts2;
 let postsArr2 = [];
 let commonContactInfo = [];
@@ -9,7 +12,7 @@ const webscraping_2 = async () => {
 
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             defaultViewport: false
         })
         const page = await browser.newPage()    // new page = new tab
@@ -20,7 +23,7 @@ const webscraping_2 = async () => {
         });
         //Muy bueno el autoscroll!
         //await autoScroll(page)
-        // await page.waitForTimeout(8000)
+         await page.waitForTimeout(150000)
 
         posts2 = await page.evaluate(async () => {
             let titlesList2 = document.querySelectorAll('div.card-body h5.card-title');
