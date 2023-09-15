@@ -1,23 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo, useCallback} from "react";
 import Button from 'react-bootstrap/Button';
 import './sidebar.css';
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {useLocation, Link} from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({currentPage, stringify, clicked, setClicked, query, setQuery}) {
     const [cats, setCats] = useState([])
     const [animalCat, setAnimalCat] = useState([])
     const [genderCat, setGenderCat] = useState([])
-    const [clicked, setClicked] = useState("")
     const [isActiveCat, setIsActiveCat] = useState(false);
     const [isActiveAn, setIsActiveAn] = useState(false);
     const [isActiveGen, setIsActiveGen] = useState(false);
 
+    const {search} = useLocation();
+    
+    console.log("El search desde location es: ", search)
+    console.log("Clicked desde sidebar: ", clicked)
+
     useEffect(() => {
         const getCats = async () => {
             const res = await axios.get("/category")
-
             setCats(res.data)
+            console.log(res)
         }
         const getAnimalCat = async () => {
             const res = await axios.get("/animalType")
@@ -31,7 +35,7 @@ export default function Sidebar() {
 
         // eslint-disable-next-line no-unused-expressions
         getCats(), getAnimalCat(), getGenderCat()
-    }, [])
+    }, [setCats, setAnimalCat, setGenderCat])
 
 
     //tags.push(`category=${selectedCat}`, `animalType=${selectedAnimal}`)
@@ -39,30 +43,27 @@ export default function Sidebar() {
     // const stringData = tags.map((value) => value).join('&')
 
 
-    let queryString = Object.keys(clicked).map((key) => {
-        return key + '=' + clicked[key]
-    }).join('&');
-    console.log(queryString)
 
-    const handleClickCategory = () => {
+    const handleClickCategory = () => { 
 
         setIsActiveCat(current => !current);
 
     };
 
-    const handleClickAn = () => {
+    const handleClickAnimal = () => {
 
         setIsActiveAn(current => !current);
 
     };
 
-    const handleClickGen = () => {
+    const handleClickGender = () => {
 
         setIsActiveGen(current => !current);
 
     };
 
-    console.log(isActiveCat)
+
+
     return (
         <div className="sidebar">
             <div className="sidebarItem">
@@ -105,7 +106,7 @@ export default function Sidebar() {
                             }}
                             onClick={() => {
                                 setClicked({...clicked, animalType: c.name})
-                                handleClickAn()
+                                handleClickAnimal()
                                 setIsActiveAn(c.name)
                             }}
                             className="sidebarListItem">
@@ -132,7 +133,7 @@ export default function Sidebar() {
                             }}
                             onClick={() => {
                                 setClicked({...clicked, gender: c.name})
-                                handleClickGen()
+                                handleClickGender()
                                 setIsActiveGen(c.name)
 
                             }}
@@ -147,12 +148,12 @@ export default function Sidebar() {
                 </ul>
             </div>
             <button>
-                <Link className="link" to={`/?${queryString}`}>
+                <Link className="link" to={`/?page=1&${stringify}`}>
                     Filtrar
                 </Link>
             </button>
             <button>
-                <Link className="link" to={"/"} onClick={() => {
+                <Link className="link" to={`/?page=1`} onClick={() => {
                     setClicked([])
                     setIsActiveCat(false)
                     setIsActiveAn(false)

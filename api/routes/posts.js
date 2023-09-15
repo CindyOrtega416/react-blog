@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
 
-//CREATE POST
+//CREATE POST - BASED ON SCRAPED DATA
 router.post('/', async (req, res) => {
     const newPost = new Post(req.body);
+
     try {
         const savedPost = await newPost.save();
         res.status(200).json(savedPost);
@@ -12,22 +13,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-//CREATE POST BASED ON SCRAPED DATA
-router.post("/puppeteer", async (req, res) => {
-    //   const { hiddenId } = req.body
-
-    try {
-        let newPost = await Post.findOne(req.body.hiddenId)
-        if (newPost) return res.status(400).json('Post already scraped')
-
-        newPost = new Post(req.body)
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost);
-    } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
-    }
-})
 
 //UPDATE POST
 router.put('/:id', async (req, res) => {
@@ -92,10 +77,13 @@ router.get("/:id", async (req, res) => {
         res.status(500).json(err);
     }
 })
-
+ //Las queries no vendran desde este lado? '/:query'
 //GET ALL POSTS WITH FILTERS
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
+
     const username = req.query.user || "";
+    //Toma el valor que haya seleccionado el usuario en el filtro (req.query.category)
+    //O toma un valor vacío si el usuario no seleecionó nada
     const category = req.query.category || "";
     const animalType = req.query.animalType || "";
     const gender = req.query.gender || "";
@@ -103,10 +91,28 @@ router.get("/", async (req, res) => {
     const eyes = req.query.eyes || "";
     const idCollar = req.query.idCollar || "";
 
+    const page = parseInt(req.query.page);
+    const limit = 5;
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+   // const PAGE_SIZE = 10;
+    //const page = parseInt(req.query.page || "1") + 1;
+
     try {
+        
         let posts;
+        let total;        
+    
         if (username) {
             posts = await Post.find({username})
+            /*    .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);*/
+            //How many pages we have based on how many documents passed the filter
+            total = await Post.countDocuments({username});
         } else if (category || animalType || gender || hair || eyes || idCollar) {
 
             const categoryFilter = category ? {category} : {};
@@ -124,11 +130,44 @@ router.get("/", async (req, res) => {
                 ...eyesFilter,
                 ...idCollarFilter
             })
+             /*   .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);*/
+            total = await Post.countDocuments({
+                ...categoryFilter,
+                ...animalTypeFilter,
+                ...genderFilter,
+                ...hairFilter,
+                ...eyesFilter,
+                ...idCollarFilter
+            });
 
         } else {
-            posts = await Post.find();
+            posts = await Post.find()
+             /*   .limit(PAGE_SIZE)
+                .skip(PAGE_SIZE * page);*/
+            total = await Post.countDocuments({})
         }
-        res.status(200).json(posts);
+
+        results.resultPosts = posts.slice(startIndex, endIndex);
+
+        results.page = page;
+
+        if(startIndex > 0){
+            results.previous = {
+            page: page - 1
+            };
+        }
+    
+        if(endIndex < posts.length){
+            results.next = {
+               page: page + 1
+               }   
+           };
+
+        res.status(200).json({
+            results,
+            totalPages: Math.ceil(total / limit)
+        });
 
     } catch (err) {
         res.status(500).json(err);

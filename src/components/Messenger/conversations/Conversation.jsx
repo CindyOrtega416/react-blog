@@ -11,16 +11,16 @@ export default function Conversation({conversation, currentUser}) {
 
         const getUser = async () => {
             try {
-                const res = await axios("/users?userId=" + friendId)
+                const res = await axios.get("/users?userId=" + friendId)
                 setUser(res.data)
-                console.log(res.data)
+                console.log('Dato de conversacion', res.data._id)
             } catch (err) {
                 console.log(err)
             }
 
         }
         getUser()
-    }, [currentUser, conversation])
+    }, [currentUser])
     
     return (
         <div className="conversation">
